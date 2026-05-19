@@ -49,7 +49,7 @@ elif [[ "$desktop_env" == "kde" ]]; then
 fi
 
 # Run the preinitramfs hook
-"$SCRIPT_DIR/titanoboa_hook_preinitramfs.sh"
+# "$SCRIPT_DIR/titanoboa_hook_preinitramfs.sh"
 
 # Install dracut-live and regenerate the initramfs
 dnf install -y dracut-live
