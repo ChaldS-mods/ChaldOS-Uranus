@@ -52,14 +52,14 @@ fi
 # "$SCRIPT_DIR/titanoboa_hook_preinitramfs.sh"
 
 # Install dracut-live and regenerate the initramfs
-sudo dnf install -y dracut-live
+sudo dnf5 install -y dracut-live
 kernel=$(kernel-install list --json pretty | jq -r '.[] | select(.has_kernel == true) | .version')
 DRACUT_NO_XATTR=1 dracut -v --force --zstd --reproducible --no-hostonly \
     --add "dmsquash-live dmsquash-live-autooverlay" \
     "/usr/lib/modules/${kernel}/initramfs.img" "${kernel}"
 
 # Install livesys-scripts and configure them
-sudo dnf install -y livesys-scripts
+sudo dnf5 install -y livesys-scripts
 if [[ ${BASE_IMAGE} == *-gnome* ]]; then
     sed -i "s/^livesys_session=.*/livesys_session=gnome/" /etc/sysconfig/livesys
 else
@@ -75,7 +75,7 @@ echo "Copying overrides of system files..."
 cp -af /src/system_files/overrides/. /
 
 # image-builder needs gcdx64.efi
-sudo dnf install -y grub2-efi-x64-cdboot
+sudo dnf5 install -y grub2-efi-x64-cdboot
 
 # image-builder expects the EFI directory to be in /boot/efi
 mkdir -p /boot/efi
@@ -129,4 +129,4 @@ mkdir -p /usr/lib/bootc-image-builder
 cp /src/iso.yaml /usr/lib/bootc-image-builder/iso.yaml
 
 # Clean up dnf cache to save space
-sudo dnf clean all
+sudo dnf5 clean all
