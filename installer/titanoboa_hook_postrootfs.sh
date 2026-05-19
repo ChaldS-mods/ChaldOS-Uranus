@@ -16,10 +16,8 @@ mkdir -p /var/lib/rpm-state # Needed for Anaconda Web UI
 dnf5 install -qy --setopt=install_weak_deps=0 qrencode yad
 
 # Variables
-imageref="$(podman images --format '{{ index .Names 0 }}\n' 'bazzite*' | head -1)"
-imageref="${imageref##*://}"
-imageref="${imageref%%:*}"
-imagetag="$(podman images --format '{{ .Tag }}\n' "$imageref" | head -1)"
+imageref="${INSTALL_IMAGE_PAYLOAD%%:*}"
+imagetag="${INSTALL_IMAGE_PAYLOAD##*:}"
 sbkey='https://github.com/ublue-os/akmods/raw/main/certs/public_key.der'
 SECUREBOOT_KEY="/usr/share/ublue-os/sb_pubkey.der"
 SECUREBOOT_DOC_URL="https://docs.bazzite.gg/sb"
@@ -28,7 +26,7 @@ SECUREBOOT_DOC_URL_QR="/usr/share/ublue-os/secure_boot_qr.png"
 # Bazzite anaconda profile
 : ${VARIANT_ID:?}
 
-echo "Bazzite release $VERSION_ID ($VERSION_CODENAME)" >/etc/system-release
+echo "ChaldOS-Uranus release $VERSION_ID ($VERSION_CODENAME)" >/etc/system-release
 
 # Secureboot Key Fetch
 mkdir -p /usr/share/ublue-os
@@ -274,10 +272,10 @@ dnf5 -yq remove steam lutris bazaar waydroid || :
 rm -vf /etc/profile.d/verify_motd.sh
 
 (
-    wallpaper_url=https://github.com/ublue-os/bazzite/raw/refs/heads/main/press_kit/art/Convergence_Wallpaper_DX.jxl
-    wallpaper_file=/usr/share/wallpapers/convergence.jxl
-    wget -nv -O "$wallpaper_file" "$wallpaper_url"
-    rm -f /usr/share/backgrounds/default.xml
+    # wallpaper already in system_files
+    
+    
+    
 )
 
 # Enable on-screen keyboard

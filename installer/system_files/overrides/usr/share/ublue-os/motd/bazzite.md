@@ -1,12 +1,6 @@
-# Welcome to Bazzite Live ISO 󰊴
-󱋩 `%IMAGE_NAME%`
+# Welcome to ChaldOS-Uranus Live ISO
 
-󰋼 The Live ISO is designed for installation and troubleshooting.
-`rpm-ostree` commands will not work here. If you've successfully installed
-Bazzite, *please restart your computer*.
+This Live ISO is for installation and troubleshooting only.
+It does **not** have drivers and is **not capable of playing games**.
 
-|  Command | Description |
-| ------- | ----------- |
-| `fastfetch` | View system information |
-| `liveinst` | Launch Installer |
-| `bootloader_restore` | Launch Bootloader Restoring tool |
+Please **do not use it in benchmarks**.
