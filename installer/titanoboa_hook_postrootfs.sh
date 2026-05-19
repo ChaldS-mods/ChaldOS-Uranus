@@ -5,7 +5,7 @@ set -exo pipefail
 source /etc/os-release
 
 # Remove all versionlocks, in order to avoid dependency issues
-dnf -qy versionlock clear
+dnf5 -qy versionlock clear
 
 # Install Anaconda
 dnf install -qy --enable-repo=fedora-cisco-openh264 --allowerasing firefox anaconda-live libblockdev-{btrfs,lvm,dm}
@@ -231,8 +231,8 @@ fi
 # Reenable nouveau
 if [[ $imageref == *-nvidia* ]]; then
     for pkg in nvidia-gpu-firmware mesa-vulkan-drivers; do
-        dnf -yq reinstall --allowerasing $pkg ||
-            dnf -yq install --allowerasing $pkg
+        dnf5 -yq reinstall --allowerasing $pkg ||
+            dnf5 -yq install --allowerasing $pkg
     done
     # Ensure nouveau vulkan icds exist
     (
@@ -268,7 +268,7 @@ fi
 rm -vf /etc/skel/.config/autostart/steam*.desktop
 
 # Remove packages that shouldn't be used in a live session
-dnf -yq remove steam lutris bazaar waydroid || :
+dnf5 -yq remove steam lutris bazaar waydroid || :
 
 # Don't check for verified image
 rm -vf /etc/profile.d/verify_motd.sh
@@ -310,6 +310,6 @@ if [[ $desktop_env == gnome ]]; then
 fi
 
 # Install Gparted
-dnf -yq install gparted
+dnf5 -yq install gparted
 
 ###############################
