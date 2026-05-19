@@ -31,12 +31,12 @@ jobs:
       fail-fast: false
       matrix:
         image_name:
-          - bazzite
-          - bazzite-nvidia
-          - bazzite-nvidia-open
-          - bazzite-gnome
-          - bazzite-gnome-nvidia
-          - bazzite-gnome-nvidia-open
+          - chaldos
+          - chaldos-nvidia
+          - chaldos-nvidia-open
+          - chaldos-gnome
+          - chaldos-gnome-nvidia
+          - chaldos-gnome-nvidia-open
     steps:
       - name: Show disk space
         run: sudo df -h

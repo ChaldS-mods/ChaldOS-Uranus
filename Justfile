@@ -1,8 +1,8 @@
 export project_root := `git rev-parse --show-toplevel`
 export git_branch := ` git branch --show-current`
-export latest := "43"
+export latest := "44"
 export default_image := "kinoite"
-export default_target := "bazzite"
+export default_target := "chaldos"
 
 alias build-iso := build-iso-release
 alias run := run-container

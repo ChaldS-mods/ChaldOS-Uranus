@@ -32,7 +32,7 @@ ARG FEDORA_VERSION="${FEDORA_VERSION:-44}"
 ARG ARCH="${ARCH:-x86_64}"
 
 ARG BASE_IMAGE="${BASE_IMAGE:-ghcr.io/ublue-os/${BASE_IMAGE_NAME}-main:${FEDORA_VERSION}}"
-ARG NVIDIA_BASE="${NVIDIA_BASE:-bazzite}"
+ARG NVIDIA_BASE="${NVIDIA_BASE:-chaldos}"
 ARG KERNEL_FLAVOR="${KERNEL_FLAVOR:-ogc}"
 ARG KERNEL_VERSION="${KERNEL_VERSION:-6.19.14-ogc5.1.fc44.x86_64}"
 ARG NVIDIA_FLAVOR="${NVIDIA_FLAVOR:-nvidia-open}"
@@ -48,7 +48,7 @@ COPY build_files /
 # DESKTOP BUILDS
 ################
 
-FROM ${BASE_IMAGE} AS bazzite
+FROM ${BASE_IMAGE} AS chaldos
 
 ARG IMAGE_NAME="${IMAGE_NAME:-chaldos}"
 ARG IMAGE_VENDOR="${IMAGE_VENDOR:-ublue-os}"
@@ -584,7 +584,7 @@ RUN --mount=type=tmpfs,target=/run --network=none bootc container lint
 # DECK BUILDS
 ################
 
-FROM bazzite AS bazzite-deck
+FROM chaldos AS chaldos-deck
 
 ARG IMAGE_NAME="${IMAGE_NAME:-chaldos-deck}"
 ARG IMAGE_VENDOR="${IMAGE_VENDOR:-ublue-os}"
@@ -761,7 +761,7 @@ RUN --mount=type=tmpfs,target=/run --network=none bootc container lint
 # NVIDIA BUILDS
 ################
 
-FROM ${NVIDIA_BASE} AS bazzite-nvidia
+FROM ${NVIDIA_BASE} AS chaldos-nvidia
 
 ARG IMAGE_NAME="${IMAGE_NAME:-chaldos-nvidia}"
 ARG IMAGE_VENDOR="${IMAGE_VENDOR:-ublue-os}"
