@@ -200,7 +200,6 @@ jobs:
           retention-days: 1
           compression-level: 0
           overwrite: true
-        if: false
         shell: bash
         env:
           RCLONE_CONFIG_R2_TYPE: s3
