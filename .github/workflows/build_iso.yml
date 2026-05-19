@@ -200,6 +200,8 @@ jobs:
           retention-days: 1
           compression-level: 0
           overwrite: true
+      - name: Upload ISOs and Checksum to R2
+        if: false
         shell: bash
         env:
           RCLONE_CONFIG_R2_TYPE: s3
