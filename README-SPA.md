@@ -1,23 +1,23 @@
 <p align="center">
-  <a href="https://bazzite.gg/">
+  <a href="https://github.com/ChaldS-mods/ChaldOS-Uranus">
     <picture>
-      <source srcset="repo_content/Bazzite_Light.svg" media="(prefers-color-scheme: dark)">
-      <img src="repo_content/Bazzite.svg" alt="Bazzite"/>
+      <source srcset="repo_content/ChaldOS_Light.svg" media="(prefers-color-scheme: dark)">
+      <img src="repo_content/ChaldOS.svg" alt="ChaldOS"/>
     </picture>
   </a>
 </p>
 
-[![build-bazzite](https://github.com/ublue-os/bazzite/actions/workflows/build.yml/badge.svg)](https://github.com/ublue-os/bazzite/actions/workflows/build.yml) [![build-bazzite-isos](https://github.com/ublue-os/bazzite/actions/workflows/build_iso.yml/badge.svg)](https://github.com/ublue-os/bazzite/actions/workflows/build_iso.yml)
+[![build-chaldos](https://github.com/ChaldS-mods/ChaldOS-Uranus/actions/workflows/build.yml/badge.svg)](https://github.com/ChaldS-mods/ChaldOS-Uranus/actions/workflows/build.yml) [![build-chaldos-isos](https://github.com/ChaldS-mods/ChaldOS-Uranus/actions/workflows/build_iso.yml/badge.svg)](https://github.com/ChaldS-mods/ChaldOS-Uranus/actions/workflows/build_iso.yml)
 
-# [🇺🇸](https://github.com/ublue-os/bazzite/blob/main/README.md) [🇪🇸](https://github.com/ublue-os/bazzite/blob/main/README-SPA.md) [🇮🇩](https://github.com/ublue-os/bazzite/blob/main/README-ID.md) [🇫🇷](https://github.com/ublue-os/bazzite/blob/main/README-FR.md) [🇧🇷](https://github.com/ublue-os/bazzite/blob/main/README-BR.md) [🇳🇱](https://github.com/ublue-os/bazzite/blob/main/README-NL.md) [🇹🇼](https://github.com/ublue-os/bazzite/blob/main/README-ZH-TW.md)
+# [🇺🇸](https://github.com/ChaldS-mods/ChaldOS-Uranus/blob/main/README.md) [🇪🇸](https://github.com/ChaldS-mods/ChaldOS-Uranus/blob/main/README-SPA.md) [🇮🇩](https://github.com/ChaldS-mods/ChaldOS-Uranus/blob/main/README-ID.md) [🇫🇷](https://github.com/ChaldS-mods/ChaldOS-Uranus/blob/main/README-FR.md) [🇧🇷](https://github.com/ChaldS-mods/ChaldOS-Uranus/blob/main/README-BR.md) [🇳🇱](https://github.com/ChaldS-mods/ChaldOS-Uranus/blob/main/README-NL.md) [🇹🇼](https://github.com/ChaldS-mods/ChaldOS-Uranus/blob/main/README-ZH-TW.md)
 
 <p align="center">
-  <a href="https://bazzite.gg/#image-picker"><img src="/repo_content/download.png?raw=true" alt="Download Bazzite"/></a>
+  <a href="https://github.com/ChaldS-mods/ChaldOS-Uranus#image-picker"><img src="/repo_content/download.png?raw=true" alt="Download Bazzite"/></a>
 </p>
 
 ---
 # Seleccionador de Imágenes
-Usa nuestro [seleccionador de imágenes](https://bazzite.gg/#image-picker) para encontrar la imagen correcta basada en tu hardware y tus preferencias.
+Usa nuestro [seleccionador de imágenes](https://github.com/ChaldS-mods/ChaldOS-Uranus#image-picker) para encontrar la imagen correcta basada en tu hardware y tus preferencias.
 
 # Tabla de Contenidos
 - [🇺🇸 🇪🇸 🇮🇩 🇫🇷 🇧🇷 🇳🇱 🇹🇼](#------)
@@ -46,7 +46,7 @@ Usa nuestro [seleccionador de imágenes](https://bazzite.gg/#image-picker) para 
 
 ## Acerca de y Características
 
-[Bazzite](https://bazzite.gg/) es una imagen OCI que sirve como un sistema operativo alterno para la [Steam Deck](https://www.steamdeck.com/), y como un sistema tipo SteamOS listo para jugar para computadoras de
+[Bazzite](https://github.com/ChaldS-mods/ChaldOS-Uranus) es una imagen OCI que sirve como un sistema operativo alterno para la [Steam Deck](https://www.steamdeck.com/), y como un sistema tipo SteamOS listo para jugar para computadoras de
 escritorio, computadoras para cine en casa (HTPC), y un sinnúmero de
 otras computadoras portátiles.
 
@@ -271,7 +271,7 @@ cosign verify --key cosign.pub ghcr.io/ublue-os/bazzite
 > [!WARNING]
 > **Usuarios de la Steam Deck: La Steam Deck no viene con Arranque Seguro habilitado y no viene con ninguna llave registrada por defecto. No habilites esto a menos que estes seguro de lo que estes haciendo.**
 
-El Arranque Seguro (Secure Boot) tiene soporte gracias a nuestra llave digital personalizada. La llave pública puede encontrarse en la raíz de [este](https://github.com/ublue-os/bazzite/blob/main/secure_boot.der) repositorio.
+El Arranque Seguro (Secure Boot) tiene soporte gracias a nuestra llave digital personalizada. La llave pública puede encontrarse en la raíz de [este](https://github.com/ChaldS-mods/ChaldOS-Uranus/blob/main/secure_boot.der) repositorio.
 
 Si gustas registrar esta llave antes de instalar Bazzite, descarga la llave y ejecuta el siguiente comando en una terminal:
 

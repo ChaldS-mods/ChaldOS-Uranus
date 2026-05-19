@@ -1,19 +1,19 @@
 <p align="center">
-  <a href="https://bazzite.gg/">
+  <a href="https://github.com/ChaldS-mods/ChaldOS-Uranus">
     <picture>
-      <source srcset="repo_content/Bazzite_Light.svg" media="(prefers-color-scheme: dark)">
-      <img src="repo_content/Bazzite.svg" alt="Bazzite"/>
+      <source srcset="repo_content/ChaldOS_Light.svg" media="(prefers-color-scheme: dark)">
+      <img src="repo_content/ChaldOS.svg" alt="ChaldOS"/>
     </picture>
   </a>
 </p>
 
-[![build-bazzite](https://github.com/ublue-os/bazzite/actions/workflows/build.yml/badge.svg)](https://github.com/ublue-os/bazzite/actions/workflows/build.yml)
+[![build-chaldos](https://github.com/ChaldS-mods/ChaldOS-Uranus/actions/workflows/build.yml/badge.svg)](https://github.com/ChaldS-mods/ChaldOS-Uranus/actions/workflows/build.yml)
 
-# [🇺🇸](https://github.com/ublue-os/bazzite/blob/main/README.md) [🇪🇸](https://github.com/ublue-os/bazzite/blob/main/README-SPA.md) [🇮🇩](https://github.com/ublue-os/bazzite/blob/main/README-ID.md) [🇫🇷](https://github.com/ublue-os/bazzite/blob/main/README-FR.md) [🇧🇷](https://github.com/ublue-os/bazzite/blob/main/README-BR.md) [🇳🇱](https://github.com/ublue-os/bazzite/blob/main/README-NL.md) [🇹🇼](https://github.com/ublue-os/bazzite/blob/main/README-ZH-TW.md)
+# [🇺🇸](https://github.com/ChaldS-mods/ChaldOS-Uranus/blob/main/README.md) [🇪🇸](https://github.com/ChaldS-mods/ChaldOS-Uranus/blob/main/README-SPA.md) [🇮🇩](https://github.com/ChaldS-mods/ChaldOS-Uranus/blob/main/README-ID.md) [🇫🇷](https://github.com/ChaldS-mods/ChaldOS-Uranus/blob/main/README-FR.md) [🇧🇷](https://github.com/ChaldS-mods/ChaldOS-Uranus/blob/main/README-BR.md) [🇳🇱](https://github.com/ChaldS-mods/ChaldOS-Uranus/blob/main/README-NL.md) [🇹🇼](https://github.com/ChaldS-mods/ChaldOS-Uranus/blob/main/README-ZH-TW.md)
 
 
 <p align="center">
-  <a href="https://bazzite.gg/#image-picker"><img src="/repo_content/download.png?raw=true" alt="Download Bazzite"/></a>
+  <a href="https://github.com/ChaldS-mods/ChaldOS-Uranus#image-picker"><img src="/repo_content/download.png?raw=true" alt="Download Bazzite"/></a>
 </p>
 
 ---
@@ -240,7 +240,7 @@ cosign verify --key cosign.pub ghcr.io/ublue-os/bazzite
 
 ## Secure Boot
 
-Secure boot didukung dengan key dari kami. Pub key dapat ditemukan di root repositori [ini](https://github.com/ublue-os/bazzite/blob/main/secure_boot.der).
+Secure boot didukung dengan key dari kami. Pub key dapat ditemukan di root repositori [ini](https://github.com/ChaldS-mods/ChaldOS-Uranus/blob/main/secure_boot.der).
 Jika anda ingin menenroll key ini sebelum instalasi, unduh key ini dan jalankan:
 
 ```bash

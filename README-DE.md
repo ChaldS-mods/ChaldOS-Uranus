@@ -1,18 +1,18 @@
 <p align="center">
-  <a href="https://bazzite.gg/">
+  <a href="https://github.com/ChaldS-mods/ChaldOS-Uranus">
     <picture>
-      <source srcset="repo_content/Bazzite_Light.svg" media="(prefers-color-scheme: dark)">
-      <img src="repo_content/Bazzite.svg" alt="Bazzite"/>
+      <source srcset="repo_content/ChaldOS_Light.svg" media="(prefers-color-scheme: dark)">
+      <img src="repo_content/ChaldOS.svg" alt="ChaldOS"/>
     </picture>
   </a>
 </p>
 
-[![build-bazzite](https://github.com/ublue-os/bazzite/actions/workflows/build.yml/badge.svg)](https://github.com/ublue-os/bazzite/actions/workflows/build.yml) [![build-bazzite-isos](https://github.com/ublue-os/bazzite/actions/workflows/build_iso.yml/badge.svg)](https://github.com/ublue-os/bazzite/actions/workflows/build_iso.yml)
+[![build-chaldos](https://github.com/ChaldS-mods/ChaldOS-Uranus/actions/workflows/build.yml/badge.svg)](https://github.com/ChaldS-mods/ChaldOS-Uranus/actions/workflows/build.yml) [![build-chaldos-isos](https://github.com/ChaldS-mods/ChaldOS-Uranus/actions/workflows/build_iso.yml/badge.svg)](https://github.com/ChaldS-mods/ChaldOS-Uranus/actions/workflows/build_iso.yml)
 
-# [🇺🇸](https://github.com/ublue-os/bazzite/blob/main/README.md) [🇪🇸](https://github.com/ublue-os/bazzite/blob/main/README-SPA.md) [🇮🇩](https://github.com/ublue-os/bazzite/blob/main/README-ID.md) [🇨🇳](https://github.com/ublue-os/bazzite/blob/main/README-zh-cn.md) [🇫🇷](https://github.com/ublue-os/bazzite/blob/main/README-FR.md) [🇧🇷](https://github.com/ublue-os/bazzite/blob/main/README-BR.md) [🇳🇱](https://github.com/ublue-os/bazzite/blob/main/README-NL.md) [🇷🇺](https://github.com/ublue-os/bazzite/blob/main/README-RU.md) [🇩🇪](https://github.com/ublue-os/bazzite/blob/main/README-DE.md) [🇹🇼](https://github.com/ublue-os/bazzite/blob/main/README-ZH-TW.md)
+# [🇺🇸](https://github.com/ChaldS-mods/ChaldOS-Uranus/blob/main/README.md) [🇪🇸](https://github.com/ChaldS-mods/ChaldOS-Uranus/blob/main/README-SPA.md) [🇮🇩](https://github.com/ChaldS-mods/ChaldOS-Uranus/blob/main/README-ID.md) [🇨🇳](https://github.com/ChaldS-mods/ChaldOS-Uranus/blob/main/README-zh-cn.md) [🇫🇷](https://github.com/ChaldS-mods/ChaldOS-Uranus/blob/main/README-FR.md) [🇧🇷](https://github.com/ChaldS-mods/ChaldOS-Uranus/blob/main/README-BR.md) [🇳🇱](https://github.com/ChaldS-mods/ChaldOS-Uranus/blob/main/README-NL.md) [🇷🇺](https://github.com/ChaldS-mods/ChaldOS-Uranus/blob/main/README-RU.md) [🇩🇪](https://github.com/ChaldS-mods/ChaldOS-Uranus/blob/main/README-DE.md) [🇹🇼](https://github.com/ChaldS-mods/ChaldOS-Uranus/blob/main/README-ZH-TW.md)
 
 <p align="center">
-  <a href="https://download.bazzite.gg/"><img src="/repo_content/download.png?raw=true" alt="Bazzite herunterladen"/></a>
+  <a href="https://github.com/ChaldS-mods/ChaldOS-Uranus/releases"><img src="/repo_content/download.png?raw=true" alt="Bazzite herunterladen"/></a>
 </p>
 
 ---
@@ -44,9 +44,9 @@
 
 ## Über & Funktionen
 
-Für eine einsteigerfreundliche Erklärung von Bazzite [besuche bitte unsere Website](https://bazzite.gg/) (Englisch). Dieses Readme behandelt alles ausführlich.
+Für eine einsteigerfreundliche Erklärung von Bazzite [besuche bitte unsere Website](https://github.com/ChaldS-mods/ChaldOS-Uranus) (Englisch). Dieses Readme behandelt alles ausführlich.
 
-[Bazzite](https://bazzite.gg/) ist ein angepasstes [Fedora Atomic](https://fedoraproject.org/atomic-desktops/)-Image, das mit [Cloud Native](https://universal-blue.org/#cloud-native)-Technologie erstellt wurde und das Beste des Linux-Gamings auf **alle deine Geräte bringt – einschließlich deines bevorzugten Handhelds**.
+[Bazzite](https://github.com/ChaldS-mods/ChaldOS-Uranus) ist ein angepasstes [Fedora Atomic](https://fedoraproject.org/atomic-desktops/)-Image, das mit [Cloud Native](https://universal-blue.org/#cloud-native)-Technologie erstellt wurde und das Beste des Linux-Gamings auf **alle deine Geräte bringt – einschließlich deines bevorzugten Handhelds**.
 
 Bazzite basiert auf [ublue-os/main](https://github.com/ublue-os/main) und [ublue-os/nvidia](https://github.com/ublue-os/nvidia) unter Verwendung der [Fedora](https://fedoraproject.org/)-Technologie. Dies bedeutet erweiterte Hardware-Unterstützung und integrierte Treiber. Zusätzlich bietet Bazzite die folgenden Funktionen:
 
@@ -252,7 +252,7 @@ cosign verify --key cosign.pub ghcr.io/ublue-os/bazzite
 > [!WARNING]
 > **Steam Deck-Benutzer: Das Steam Deck wird nicht mit aktiviertem Secure Boot ausgeliefert und enthält standardmäßig keine registrierten Schlüssel. Aktiviere dies nicht, es sei denn, du weißt genau, was du tust.**
 
-Secure Boot wird mit unserem benutzerdefinierten Schlüssel unterstützt. Der öffentliche Schlüssel ist im Root-Verzeichnis dieses Repositories [hier](https://github.com/ublue-os/bazzite/blob/main/secure_boot.der) zu finden.
+Secure Boot wird mit unserem benutzerdefinierten Schlüssel unterstützt. Der öffentliche Schlüssel ist im Root-Verzeichnis dieses Repositories [hier](https://github.com/ChaldS-mods/ChaldOS-Uranus/blob/main/secure_boot.der) zu finden.
 Wenn du diesen Schlüssel vor der Installation oder dem Rebase registrieren möchtest, lade den Schlüssel herunter und führe Folgendes aus:
 
 ```bash

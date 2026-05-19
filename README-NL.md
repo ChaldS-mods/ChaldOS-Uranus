@@ -1,18 +1,18 @@
 <p align="center">
-  <a href="https://bazzite.gg/">
+  <a href="https://github.com/ChaldS-mods/ChaldOS-Uranus">
     <picture>
-      <source srcset="repo_content/Bazzite_Light.svg" media="(prefers-color-scheme: dark)">
-      <img src="repo_content/Bazzite.svg" alt="Bazzite"/>
+      <source srcset="repo_content/ChaldOS_Light.svg" media="(prefers-color-scheme: dark)">
+      <img src="repo_content/ChaldOS.svg" alt="ChaldOS"/>
     </picture>
   </a>
 </p>
 
-[![build-bazzite](https://github.com/ublue-os/bazzite/actions/workflows/build.yml/badge.svg)](https://github.com/ublue-os/bazzite/actions/workflows/build.yml) [![build-bazzite-isos](https://github.com/ublue-os/bazzite/actions/workflows/build_iso.yml/badge.svg)](https://github.com/ublue-os/bazzite/actions/workflows/build_iso.yml)
+[![build-chaldos](https://github.com/ChaldS-mods/ChaldOS-Uranus/actions/workflows/build.yml/badge.svg)](https://github.com/ChaldS-mods/ChaldOS-Uranus/actions/workflows/build.yml) [![build-chaldos-isos](https://github.com/ChaldS-mods/ChaldOS-Uranus/actions/workflows/build_iso.yml/badge.svg)](https://github.com/ChaldS-mods/ChaldOS-Uranus/actions/workflows/build_iso.yml)
 
-# [🇺🇸](https://github.com/ublue-os/bazzite/blob/main/README.md) [🇪🇸](https://github.com/ublue-os/bazzite/blob/main/README-SPA.md) [🇮🇩](https://github.com/ublue-os/bazzite/blob/main/README-ID.md) [:cn:](https://github.com/ublue-os/bazzite/blob/main/README-zh-cn.md) [🇫🇷](https://github.com/ublue-os/bazzite/blob/main/README-FR.md) [🇧🇷](https://github.com/ublue-os/bazzite/blob/main/README-BR.md) [🇳🇱](https://github.com/ublue-os/bazzite/blob/main/README-NL.md) [🇹🇼](https://github.com/ublue-os/bazzite/blob/main/README-ZH-TW.md)
+# [🇺🇸](https://github.com/ChaldS-mods/ChaldOS-Uranus/blob/main/README.md) [🇪🇸](https://github.com/ChaldS-mods/ChaldOS-Uranus/blob/main/README-SPA.md) [🇮🇩](https://github.com/ChaldS-mods/ChaldOS-Uranus/blob/main/README-ID.md) [:cn:](https://github.com/ChaldS-mods/ChaldOS-Uranus/blob/main/README-zh-cn.md) [🇫🇷](https://github.com/ChaldS-mods/ChaldOS-Uranus/blob/main/README-FR.md) [🇧🇷](https://github.com/ChaldS-mods/ChaldOS-Uranus/blob/main/README-BR.md) [🇳🇱](https://github.com/ChaldS-mods/ChaldOS-Uranus/blob/main/README-NL.md) [🇹🇼](https://github.com/ChaldS-mods/ChaldOS-Uranus/blob/main/README-ZH-TW.md)
 
 <p align="center">
-  <a href="https://download.bazzite.gg/"><img src="/repo_content/download.png?raw=true" alt="Download Bazzite"/></a>
+  <a href="https://github.com/ChaldS-mods/ChaldOS-Uranus/releases"><img src="/repo_content/download.png?raw=true" alt="Download Bazzite"/></a>
 </p>
 
 ---
@@ -42,9 +42,9 @@
 
 ## Over & Kenmerken
 
-[Bezoek onze website](https://bazzite.gg/) voor een nieuwkomer vriendelijke uitleg. Deze readme dekt alles grondig.
+[Bezoek onze website](https://github.com/ChaldS-mods/ChaldOS-Uranus) voor een nieuwkomer vriendelijke uitleg. Deze readme dekt alles grondig.
 
-[Bazzite](https://bazzite.gg/) is een OCI image die als alternatief besturingssysteem werkt voor de [Steam Deck](https://www.steamdeck.com/) en een klaar-om-te-gamen SteamOS-achtig alternatief voor desktop computers en woonkamer home theater PCs.
+[Bazzite](https://github.com/ChaldS-mods/ChaldOS-Uranus) is een OCI image die als alternatief besturingssysteem werkt voor de [Steam Deck](https://www.steamdeck.com/) en een klaar-om-te-gamen SteamOS-achtig alternatief voor desktop computers en woonkamer home theater PCs.
 
 Bazzite is gebouwd van [ublue-os/main](https://github.com/ublue-os/main) en [ublue-os/nvidia](https://github.com/ublue-os/nvidia) met [Fedora](https://fedoraproject.org/) technologie, wat betekent dat uitgebreide hardwareondersteuning en ingebouwde stuurprogramma's zijn inbegrepen. Daarnaast voegt Bazzite de volgende functies toe:
 
@@ -262,7 +262,7 @@ cosign verify --key cosign.pub ghcr.io/ublue-os/bazzite
 > [!WARNING]
 > **Steam Deck Gebruikers: De Steam Deck komt niet met Secure Boot aan en komt zonder sleutels ingeschakeld. Zet dit niet aan behalven als je ABSOLUUT weet wat je doet.**
 
-Secure boot is beschikbaar met onze eigen sleutel. De pub sleutel kan [hier](https://github.com/ublue-os/bazzite/blob/main/secure_boot.der) gevonden worden.
+Secure boot is beschikbaar met onze eigen sleutel. De pub sleutel kan [hier](https://github.com/ChaldS-mods/ChaldOS-Uranus/blob/main/secure_boot.der) gevonden worden.
 Als je de sleutel voor installatie wilt gebruiken, voeg dit in de terminal in:
 
 ```bash
