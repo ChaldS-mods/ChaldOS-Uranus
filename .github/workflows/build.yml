@@ -519,6 +519,7 @@ jobs:
           cosign-release: "v2.6.1"
 
       - name: Sign container image
+        if: false
         if: github.event_name != 'pull_request'
         run: |
           cosign sign -y --key env://COSIGN_PRIVATE_KEY ${{ steps.base.outputs.output_image }}@${{ steps.push.outputs.digest }}
@@ -554,6 +555,7 @@ jobs:
           echo "sbom_digest=${sbom_digest}" >> $GITHUB_OUTPUT
 
       - name: Sign SBOM OCI Artifact
+        if: false
         if: github.event_name != 'pull_request'
         env:
           COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
