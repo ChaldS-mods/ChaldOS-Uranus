@@ -161,6 +161,7 @@ jobs:
           cosign-release: 'v2.6.1'
 
       - name: Sign ISO
+        if: false
         env:
           SIGNING_KEY: ${{ secrets.SIGNING_SECRET }}
           ISO_UPLOAD_DIR: ${{ steps.upload-directory.outputs.iso-upload-dir }}
