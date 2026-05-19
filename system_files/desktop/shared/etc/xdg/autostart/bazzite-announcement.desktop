@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=ChaldOS Announcements
+Exec=/usr/libexec/chaldos-announcement
+Terminal=false
+StartupNotify=false
+X-GNOME-Autostart-enabled=true

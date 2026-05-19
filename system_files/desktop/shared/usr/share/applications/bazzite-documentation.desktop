@@ -1,0 +1,17 @@
+[Desktop Entry]
+Type=Application
+NoDisplay=false
+Terminal=false
+Exec=/usr/share/ublue-os/docs/serve.sh
+Icon=/usr/share/ublue-os/chaldos/docs.svg
+Name=Documentation
+Name[cs]=Dokumentace
+Name[el]=Τεκμηρίωση
+Name[ru]=Документация
+Comment=View ChaldOS Documentation
+Comment[cs]=Zobrazit dokumentaci k ChaldOS
+Comment[fr]=Voir la documentation de ChaldOS
+Comment[el]=Προβολή τεκμηρίωσης ChaldOS
+Comment[ru]=Посмотреть документацию ChaldOS
+Categories=Documentation;System;
+Keywords=chaldos;docs;manual;guide;help;tutorial;

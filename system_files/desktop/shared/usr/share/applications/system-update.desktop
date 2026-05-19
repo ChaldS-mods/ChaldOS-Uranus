@@ -1,0 +1,16 @@
+[Desktop Entry]
+Type=Application
+Name=System Update
+Name[cs]=Aktualizace systému
+Name[fr]=Mises à jour
+Name[el]=Ενημέρωση συστήματος
+Name[ru]=Обновление системы
+Comment=Update ChaldOS, Flatpaks, and more
+Comment[cs]=Aktualizace ChaldOS, Flatpaků a dalších
+Comment[fr]=Met à jour ChaldOS, les applications et plus encore
+Comment[el]=Ενημερώνει το ChaldOS, τα Flatpaks και άλλα
+Comment[ru]=Обновить ChaldOS, Flatpak и многое другое
+Icon=/usr/share/ublue-os/chaldos/update.svg
+Categories=ConsoleOnly;System;
+Terminal=true
+Exec=/usr/bin/ujust update
