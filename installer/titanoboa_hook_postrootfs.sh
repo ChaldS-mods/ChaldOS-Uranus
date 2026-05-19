@@ -8,12 +8,12 @@ source /etc/os-release
 dnf5 -qy versionlock clear
 
 # Install Anaconda
-dnf install -qy --enable-repo=fedora-cisco-openh264 --allowerasing firefox anaconda-live libblockdev-{btrfs,lvm,dm}
+dnf5 install -qy --enable-repo=fedora-cisco-openh264 --allowerasing firefox anaconda-live libblockdev-{btrfs,lvm,dm}
 
 mkdir -p /var/lib/rpm-state # Needed for Anaconda Web UI
 
 # Utilities for displaying a dialog prompting users to review secure boot documentation
-dnf install -qy --setopt=install_weak_deps=0 qrencode yad
+dnf5 install -qy --setopt=install_weak_deps=0 qrencode yad
 
 # Variables
 imageref="$(podman images --format '{{ index .Names 0 }}\n' 'bazzite*' | head -1)"
@@ -261,7 +261,7 @@ esac
 # Install conky to display hardware information on the desktop
 # Excluded from GNOME for the time being
 if [[ $desktop_env == kde ]]; then
-    dnf install -qy --setopt=install_weak_deps=0 conky
+    dnf5 install -qy --setopt=install_weak_deps=0 conky
 fi
 
 # Don't start Steam at login
