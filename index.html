@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ChaldOS – Linux for the next generation</title>
+<meta name="description" content="ChaldOS is a custom Linux distribution built for gaming and everyday use.">
+<meta name="theme-color" content="#00c8c8">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --teal:#00c8c8;--teal-dark:#009999;--teal-glow:rgba(0,200,200,0.2);
+  --bg:#04060f;--bg2:#080d1a;--bg3:#0c1220;
+  --text:#e8f0ff;--text2:#6a80a0;
+  --border:rgba(0,200,200,0.13);--border2:rgba(255,255,255,0.06);
+  --radius:16px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;overflow-x:hidden}
+a{color:var(--teal);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* ── STARS ── */
+#starfield{position:fixed;inset:0;z-index:0;pointer-events:none}
+
+/* ── NEBULA ── */
+.nb{position:fixed;border-radius:50%;filter:blur(100px);pointer-events:none;z-index:0}
+.nb1{width:700px;height:700px;background:radial-gradient(circle,rgba(0,150,200,.13) 0%,transparent 70%);top:-150px;right:-150px;animation:d1 20s ease-in-out infinite alternate}
+.nb2{width:500px;height:500px;background:radial-gradient(circle,rgba(0,60,160,.11) 0%,transparent 70%);bottom:50px;left:-100px;animation:d2 25s ease-in-out infinite alternate}
+@keyframes d1{from{transform:translate(0,0) scale(1)}to{transform:translate(-50px,70px) scale(1.1)}}
+@keyframes d2{from{transform:translate(0,0)}to{transform:translate(60px,-50px)}}
+
+/* ── NAV ── */
+nav{display:flex;align-items:center;justify-content:space-between;padding:1rem 2.5rem;position:sticky;top:0;z-index:200;background:rgba(4,6,15,.82);backdrop-filter:blur(18px);border-bottom:1px solid var(--border)}
+.nav-logo{display:flex;align-items:center;gap:11px;font-family:'Space Mono',monospace;font-size:1.05rem;color:var(--text)}
+.nav-logo img{width:34px;height:34px;object-fit:contain}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{color:var(--text2);font-size:.88rem;font-weight:500;letter-spacing:.04em;transition:color .2s}
+.nav-links a:hover{color:var(--teal);text-decoration:none}
+
+/* ── HERO ── */
+.hero{position:relative;z-index:1;text-align:center;padding:7rem 2rem 4rem;max-width:860px;margin:0 auto}
+.hero-logo-wrap{position:relative;display:inline-block;margin-bottom:2.5rem}
+.hero-logo-wrap img{width:120px;height:120px;object-fit:contain;position:relative;z-index:2;filter:drop-shadow(0 0 28px rgba(0,200,200,.5));animation:lp 4s ease-in-out infinite}
+@keyframes lp{0%,100%{filter:drop-shadow(0 0 24px rgba(0,200,200,.4))}50%{filter:drop-shadow(0 0 52px rgba(0,200,200,.75))}}
+.orbit{position:absolute;inset:-26px;border:1px solid rgba(0,200,200,.22);border-radius:50%;animation:os 11s linear infinite;z-index:1}
+.orbit::after{content:'';position:absolute;width:7px;height:7px;background:var(--teal);border-radius:50%;top:50%;left:-3.5px;transform:translateY(-50%);box-shadow:0 0 10px var(--teal)}
+@keyframes os{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.orbit2{position:absolute;inset:-46px;border:1px dashed rgba(0,200,200,.08);border-radius:50%;animation:os 28s linear infinite reverse;z-index:1}
+
+.eyebrow{font-family:'Space Mono',monospace;font-size:.72rem;letter-spacing:.22em;color:var(--teal);text-transform:uppercase;margin-bottom:1.2rem;opacity:0;animation:fi .8s .2s forwards}
+.hero h1{font-size:clamp(2.4rem,6vw,4rem);font-weight:800;line-height:1.1;margin-bottom:1.4rem;background:linear-gradient(140deg,#fff 30%,var(--teal) 80%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;opacity:0;animation:fi .8s .35s forwards}
+.hero p{font-size:1.1rem;color:var(--text2);max-width:560px;margin:0 auto 2.5rem;font-weight:300;opacity:0;animation:fi .8s .5s forwards}
+.hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;opacity:0;animation:fi .8s .65s forwards}
+@keyframes fi{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+/* smart banner */
+.smart-banner{display:inline-flex;align-items:center;gap:10px;margin-top:1.75rem;padding:.65rem 1.4rem;border-radius:999px;background:rgba(0,200,200,.08);border:1px solid rgba(0,200,200,.2);font-size:.88rem;color:var(--teal);opacity:0;animation:fi .8s .8s forwards;cursor:default}
+.smart-banner .dot{width:7px;height:7px;background:var(--teal);border-radius:50%;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:1;transform:scale(1.3)}}
+
+.notice{display:inline-flex;align-items:center;gap:8px;margin-top:.9rem;padding:.5rem 1.1rem;border-radius:999px;background:rgba(255,170,0,.07);border:1px solid rgba(255,170,0,.2);font-size:.82rem;color:#e8a820;opacity:0;animation:fi .8s .95s forwards}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:.8rem 2rem;border-radius:10px;font-size:.92rem;font-weight:600;cursor:pointer;transition:all .22s;text-decoration:none;letter-spacing:.01em}
+.btn-primary{background:var(--teal);color:#04060f;box-shadow:0 0 24px rgba(0,200,200,.3)}
+.btn-primary:hover{background:#00dada;box-shadow:0 0 40px rgba(0,200,200,.5);text-decoration:none;color:#04060f;transform:translateY(-2px)}
+.btn-secondary{background:transparent;color:var(--text);border:1px solid var(--border2);backdrop-filter:blur(8px)}
+.btn-secondary:hover{border-color:var(--teal);color:var(--teal);text-decoration:none;transform:translateY(-2px)}
+
+/* ── DIVIDER ── */
+.divider{position:relative;z-index:1;height:1px;background:linear-gradient(90deg,transparent,rgba(0,200,200,.15),transparent);margin:0}
+
+/* ── SECTIONS ── */
+section{position:relative;z-index:1;padding:5rem 2rem;max-width:1140px;margin:0 auto}
+.sec-label{font-family:'Space Mono',monospace;font-size:.68rem;letter-spacing:.22em;color:var(--teal);text-transform:uppercase;text-align:center;margin-bottom:.8rem}
+.sec-title{font-size:clamp(1.6rem,3vw,2.1rem);font-weight:700;text-align:center;margin-bottom:.6rem}
+.sec-sub{color:var(--text2);text-align:center;margin-bottom:3.5rem;font-weight:300;font-size:1rem}
+
+/* ── FEATURES ── */
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.2rem}
+.fc{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1.75rem;position:relative;overflow:hidden;transition:border-color .25s,transform .25s,box-shadow .25s}
+.fc::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,200,200,.45),transparent);opacity:0;transition:opacity .25s}
+.fc:hover{border-color:rgba(0,200,200,.32);transform:translateY(-4px);box-shadow:0 14px 40px rgba(0,200,200,.08)}
+.fc:hover::before{opacity:1}
+.fi-icon{margin-bottom:1rem;display:block;color:var(--teal)}
+.fc h3{font-size:.98rem;font-weight:600;margin-bottom:.45rem;color:var(--text)}
+.fc p{font-size:.88rem;color:var(--text2);line-height:1.65}
+
+/* ── SMART DOWNLOADER ── */
+.smart-section{position:relative;z-index:1;padding:5rem 2rem;max-width:800px;margin:0 auto}
+.smart-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:2.5rem;text-align:center}
+.smart-card h2{font-size:1.5rem;font-weight:700;margin-bottom:.5rem}
+.smart-card p{color:var(--text2);font-size:.95rem;margin-bottom:2rem}
+.gpu-btns{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;margin-bottom:1.5rem}
+.gpu-btn{display:inline-flex;align-items:center;gap:8px;padding:.55rem 1.25rem;border-radius:8px;font-size:.85rem;font-weight:600;cursor:pointer;transition:all .2s;background:var(--bg3);border:1px solid var(--border2);color:var(--text2)}
+.gpu-btn:hover,.gpu-btn.active{background:rgba(0,200,200,.1);border-color:var(--teal);color:var(--teal);text-decoration:none}
+.gpu-btn.active{box-shadow:0 0 16px rgba(0,200,200,.15)}
+.rec-box{background:var(--bg3);border:1px solid rgba(0,200,200,.2);border-radius:12px;padding:1.5rem;display:none}
+.rec-box.show{display:block}
+.rec-box h3{font-size:1rem;font-weight:600;margin-bottom:.3rem;color:var(--teal)}
+.rec-box p{font-size:.85rem;color:var(--text2);margin-bottom:1.2rem}
+.rec-size{font-family:'Space Mono',monospace;font-size:.75rem;color:var(--text2);margin-bottom:1rem;display:block}
+
+/* ── ALL DOWNLOADS ── */
+.dl-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.dl-head{padding:1.1rem 1.75rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;background:rgba(0,200,200,.04)}
+.dl-head h3{font-size:.9rem;font-weight:600;font-family:'Space Mono',monospace;color:var(--text)}
+.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 12px;border-radius:999px;font-size:.72rem;font-weight:600;letter-spacing:.05em}
+.badge-stable{background:rgba(0,200,200,.12);color:var(--teal);border:1px solid rgba(0,200,200,.25)}
+.badge-stable::before{content:'●';font-size:.52rem}
+.dl-row{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.75rem;border-bottom:1px solid var(--border2);flex-wrap:wrap;gap:.75rem;transition:background .18s}
+.dl-row:last-child{border-bottom:none}
+.dl-row:hover{background:rgba(0,200,200,.04)}
+.dl-info{display:flex;align-items:center;gap:.85rem}
+.dl-name{font-size:.9rem;font-weight:500}
+.dl-meta{font-size:.78rem;color:var(--text2);margin-top:1px}
+.btn-sm{padding:.42rem 1rem;font-size:.8rem;border-radius:8px;font-weight:600}
+
+/* ── SPECS ── */
+.specs{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem}
+.sc{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1.4rem 1.5rem;position:relative;overflow:hidden}
+.sc::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--teal),transparent);opacity:.35}
+.sc-label{font-family:'Space Mono',monospace;font-size:.65rem;color:var(--teal);text-transform:uppercase;letter-spacing:.12em;margin-bottom:.45rem}
+.sc-value{font-size:.95rem;font-weight:600;color:var(--text)}
+
+/* ── FOOTER ── */
+footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:2.5rem 2rem;text-align:center;color:var(--text2);font-size:.85rem}
+.footer-logo{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:.9rem;font-family:'Space Mono',monospace;font-size:.85rem;color:var(--text2)}
+.footer-logo img{width:22px;opacity:.75;object-fit:contain}
+footer p{margin-bottom:.35rem}
+footer a{color:var(--text2);transition:color .2s}
+footer a:hover{color:var(--teal);text-decoration:none}
+
+/* SVG icons */
+.ico{display:inline-block;vertical-align:middle}
+
+/* ── TERMINAL ── */
+.term-wrap{background:#060b14;border:1px solid rgba(0,200,200,.18);border-radius:14px;overflow:hidden;box-shadow:0 0 60px rgba(0,200,200,.07),0 24px 60px rgba(0,0,0,.5)}
+.term-bar{display:flex;align-items:center;gap:.75rem;padding:.65rem 1rem;background:rgba(0,200,200,.04);border-bottom:1px solid rgba(0,200,200,.1)}
+.term-dots{display:flex;gap:6px}
+.term-dot{width:12px;height:12px;border-radius:50%;display:block}
+.term-title{flex:1;text-align:center;font-family:'Space Mono',monospace;font-size:.72rem;color:var(--text2);letter-spacing:.06em}
+.term-clear{font-family:'Space Mono',monospace;font-size:.68rem;color:var(--text2);cursor:pointer;padding:3px 8px;border-radius:5px;transition:all .18s;border:1px solid transparent}
+.term-clear:hover{color:var(--teal);border-color:rgba(0,200,200,.2)}
+.term-body{padding:1.25rem 1.4rem;min-height:260px;max-height:420px;overflow-y:auto;display:flex;flex-direction:column;gap:.3rem;font-family:'Space Mono',monospace;font-size:.82rem;line-height:1.7}
+.term-body::-webkit-scrollbar{width:4px}
+.term-body::-webkit-scrollbar-track{background:transparent}
+.term-body::-webkit-scrollbar-thumb{background:rgba(0,200,200,.2);border-radius:2px}
+.term-line{display:flex;align-items:baseline;gap:.45rem;flex-wrap:wrap}
+.term-prompt{color:var(--teal);font-weight:700}
+.term-sep{color:var(--text2)}
+.term-path{color:#7dc4e4}
+.term-dollar{color:var(--text2)}
+.term-cmd-echo{color:var(--text)}
+.term-output{color:var(--text2);padding-left:0;line-height:1.75;white-space:pre-wrap}
+.term-output.ok{color:#a8e6a3}
+.term-output.err{color:#ff7b7b}
+.term-output.info{color:#7dc4e4}
+.term-output b{color:var(--teal)}
+.term-neofetch{display:grid;grid-template-columns:auto 1fr;gap:.1rem 1.5rem;margin:.5rem 0 .25rem}
+.term-nf-art{color:var(--teal);white-space:pre;line-height:1.35;font-size:.78rem;align-self:start}
+.term-nf-info{display:flex;flex-direction:column;gap:.15rem;font-size:.78rem}
+.term-nf-info .nf-row{color:var(--text2)}
+.term-nf-info .nf-row b{color:var(--text)}
+.term-nf-info .nf-title{color:var(--teal);font-weight:700;font-size:.85rem;margin-bottom:.3rem}
+.term-nf-colors{display:flex;gap:4px;margin-top:.5rem}
+.term-nf-colors span{width:14px;height:14px;border-radius:3px;display:inline-block}
+.term-input-row{display:flex;align-items:center;gap:.45rem;padding:.75rem 1.4rem;border-top:1px solid rgba(0,200,200,.08);font-family:'Space Mono',monospace;font-size:.82rem;background:rgba(0,200,200,.02)}
+.term-input{flex:1;background:none;border:none;outline:none;color:var(--text);font-family:'Space Mono',monospace;font-size:.82rem;caret-color:var(--teal)}
+.term-input::placeholder{color:rgba(100,130,160,.4)}
+.term-cursor{display:inline-block;width:8px;height:1em;background:var(--teal);opacity:.8;animation:blink .9s step-end infinite;vertical-align:text-bottom}
+@keyframes blink{0%,100%{opacity:.8}50%{opacity:0}}
+@media(max-width:640px){.term-neofetch{grid-template-columns:1fr}.term-nf-art{display:none}}
+
+/* ── SPECS v2 ── */
+.specs-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.specs-col{display:flex;flex-direction:column;gap:.75rem}
+.specs-col-header{display:flex;align-items:center;gap:8px;padding:.6rem 1.1rem;border-radius:10px;font-family:'Space Mono',monospace;font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:.25rem}
+.specs-col-header--min{background:rgba(100,120,160,.1);border:1px solid rgba(100,120,160,.2);color:#7a90b8}
+.specs-col-header--rec{background:rgba(0,200,200,.08);border:1px solid rgba(0,200,200,.22);color:var(--teal)}
+.specs-col--rec .sc::after{opacity:.55}
+.sc--optional{opacity:.6}
+.sc--optional:hover{opacity:1;transition:opacity .2s}
+.sc-optional-tag{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:999px;font-size:.6rem;font-family:'Space Mono',monospace;letter-spacing:.08em;text-transform:uppercase;background:rgba(255,200,0,.1);border:1px solid rgba(255,200,0,.25);color:#c8a020;vertical-align:middle}
+@media(max-width:640px){.specs-grid{grid-template-columns:1fr}}
+
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;border:none;background:none}
+.hamburger span{display:block;width:22px;height:2px;background:var(--text);border-radius:2px;transition:all .25s}
+.hamburger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+.mobile-menu{display:none;position:fixed;top:61px;left:0;right:0;background:rgba(4,6,15,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:1.25rem 1.5rem;z-index:199;flex-direction:column;gap:.25rem}
+.mobile-menu.open{display:flex}
+.mobile-menu a{color:var(--text2);font-size:.95rem;font-weight:500;padding:.7rem 0;border-bottom:1px solid var(--border2);transition:color .2s}
+.mobile-menu a:last-child{border-bottom:none}
+.mobile-menu a:hover{color:var(--teal);text-decoration:none}
+@media(max-width:640px){
+  nav{padding:1rem 1.25rem}
+  .nav-links{display:none}
+  .hamburger{display:flex}
+  .hero{padding:5rem 1.25rem 3.5rem}
+  section,.smart-section{padding:4rem 1.25rem}
+  .dl-row{padding:.9rem 1.25rem}
+  .dl-head{padding:1rem 1.25rem}
+}
+</style>
+</head>
+<body>
+
+<canvas id="starfield"></canvas>
+<div class="nb nb1"></div>
+<div class="nb nb2"></div>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">
+    <img id="nav-logo-img" src="" alt="ChaldOS">
+    ChaldOS
+  </a>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <nav id="mobile-menu" class="mobile-menu">
+    <a href="#features">Features</a>
+    <a href="#smart">Download</a>
+    <a href="#specs">System</a>
+    <a href="#terminal">Terminal</a>
+    <a href="https://github.com/ChaldS-mods/ChaldOS-Uranus">GitHub</a>
+  </nav>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#smart">Download</a></li>
+    <li><a href="#specs">System</a></li>
+    <li><a href="#terminal">Terminal</a></li>
+    <li><a href="https://github.com/ChaldS-mods/ChaldOS-Uranus">GitHub</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-logo-wrap">
+    <div class="orbit2"></div>
+    <div class="orbit"></div>
+    <img id="hero-logo-img" src="" alt="ChaldOS">
+  </div>
+  <p class="eyebrow">Uranus Edition · Early Access</p>
+  <h1>Linux built for gamers</h1>
+  <p>A custom Linux distribution built for gaming and everyday use — immutable, fast, and ready for orbit.</p>
+  <div class="hero-btns">
+    <a class="btn btn-primary" href="#smart">
+      <svg class="ico" width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M12 3v13M5 13l7 7 7-7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Download
+    </a>
+    <a class="btn btn-secondary" href="https://github.com/ChaldS-mods/ChaldOS-Uranus">
+      <svg class="ico" width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.49.5.09.68-.22.68-.48v-1.7C6.73 19.91 6.14 18 6.14 18c-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34C7.17 16.19 4.9 15.36 4.9 11.5c0-1.08.39-1.96 1.03-2.65-.1-.25-.45-1.25.1-2.61 0 0 .84-.27 2.75 1.02A9.56 9.56 0 0 1 12 6.8c.85 0 1.7.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.36.2 2.36.1 2.61.64.69 1.03 1.57 1.03 2.65 0 3.87-2.28 4.69-4.45 4.94.35.3.66.9.66 1.82v2.7c0 .27.18.58.69.48A10.01 10.01 0 0 0 22 12c0-5.52-4.48-10-10-10z"/></svg>
+      GitHub
+    </a>
+  </div>
+  <div id="smart-banner" class="smart-banner">
+    <span class="dot"></span>
+    <span id="banner-text">Detecting your GPU…</span>
+  </div>
+  <div class="notice">⚠ Early development — expect rough edges</div>
+</div>
+
+<div class="divider"></div>
+
+<!-- FEATURES -->
+<section id="features">
+  <p class="sec-label">// Why ChaldOS</p>
+  <h2 class="sec-title">Everything included, nothing wasted</h2>
+  <p class="sec-sub">Gaming-ready out of the box.</p>
+  <div class="features-grid">
+
+    <div class="fc">
+      <span class="fi-icon">
+        <svg width="28" height="28" fill="none" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="3" stroke="currentColor" stroke-width="1.8"/><path d="M6 10h2m4 0h2m-4 4h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </span>
+      <h3>Gaming-ready</h3>
+      <p>Steam, Proton, MangoHud, vkBasalt and more — pre-installed and configured so you can play right away.</p>
+    </div>
+
+    <div class="fc">
+      <span class="fi-icon">
+        <svg width="28" height="28" fill="none" viewBox="0 0 24 24"><path d="M12 2l2.5 6.5H21l-5.5 4 2 6.5L12 15l-5.5 4 2-6.5L3 8.5h6.5z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+      </span>
+      <h3>Immutable base</h3>
+      <p>Built on Fedora Atomic with ostree. Your system stays stable and you can always roll back.</p>
+    </div>
+
+    <div class="fc">
+      <span class="fi-icon">
+        <svg width="28" height="28" fill="none" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8 20h8M12 18v2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </span>
+      <h3>KDE Plasma</h3>
+      <p>Ships with KDE Plasma — fast, customisable, modern. A GNOME edition is also available.</p>
+    </div>
+
+    <div class="fc">
+      <span class="fi-icon">
+        <svg width="28" height="28" fill="none" viewBox="0 0 24 24"><path d="M12 2v4M12 18v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M2 12h4M18 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </span>
+      <h3>Patched kernel</h3>
+      <p>HDR support, extra hardware compatibility, and performance patches baked right in.</p>
+    </div>
+
+    <div class="fc">
+      <span class="fi-icon">
+        <svg width="28" height="28" fill="none" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="2" stroke="currentColor" stroke-width="1.8"/><rect x="13" y="3" width="8" height="8" rx="2" stroke="currentColor" stroke-width="1.8"/><rect x="3" y="13" width="8" height="8" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M17 13v8M13 17h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </span>
+      <h3>Flatpak + Distrobox</h3>
+      <p>Install apps as Flatpaks or run any Linux distro inside Distrobox containers.</p>
+    </div>
+
+    <div class="fc">
+      <span class="fi-icon">
+        <svg width="28" height="28" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.8"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10A15.3 15.3 0 0 1 12 2z" stroke="currentColor" stroke-width="1.8"/></svg>
+      </span>
+      <h3>Open source</h3>
+      <p>Fully open source and community-driven. Fork it, modify it, make it entirely yours.</p>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SMART DOWNLOADER -->
+<div class="smart-section" id="smart">
+  <p class="sec-label">// Smart Download</p>
+  <div class="smart-card">
+    <h2>What's your GPU?</h2>
+    <p>We detected your setup — confirm or pick manually and we'll show the right build.</p>
+    <div class="gpu-btns">
+      <a class="gpu-btn" id="btn-amd" onclick="selectGpu('amd',this)">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M3 3h18v18H3z" stroke="currentColor" stroke-width="1.7" rx="2"/><path d="M7 17l3-7 3 7M8.5 14h4M17 7v10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        AMD / Intel
+      </a>
+      <a class="gpu-btn" id="btn-nvidia" onclick="selectGpu('nvidia',this)">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M7 12h10M7 9v6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        NVIDIA (proprietary)
+      </a>
+      <a class="gpu-btn" id="btn-nvidia-open" onclick="selectGpu('nvidia-open',this)">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M12 9v6M9 12h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        NVIDIA (open)
+      </a>
+    </div>
+
+    <div class="rec-box" id="rec-amd">
+      <h3>ChaldOS KDE — Standard</h3>
+      <p>Recommended for AMD and Intel GPU users. Includes open-source Mesa drivers.</p>
+      <span class="rec-size">6.82 GB · ISO image</span>
+      <a class="btn btn-primary" href="https://github.com/ChaldS-mods/ChaldOS-Uranus/actions/runs/26099456692/artifacts/7085240637">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24"><path d="M12 3v13M5 13l7 7 7-7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Download KDE
+      </a>
+    </div>
+
+    <div class="rec-box" id="rec-nvidia">
+      <h3>ChaldOS KDE — NVIDIA</h3>
+      <p>Recommended for NVIDIA users. Includes the proprietary NVIDIA driver for best performance.</p>
+      <span class="rec-size">7.47 GB · ISO image</span>
+      <a class="btn btn-primary" href="https://github.com/ChaldS-mods/ChaldOS-Uranus/actions/runs/26099456692/artifacts/7085180448">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24"><path d="M12 3v13M5 13l7 7 7-7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Download KDE NVIDIA
+      </a>
+    </div>
+
+    <div class="rec-box" id="rec-nvidia-open">
+      <h3>ChaldOS KDE — NVIDIA Open</h3>
+      <p>For NVIDIA users preferring the open-source kernel module (RTX 20-series and newer).</p>
+      <span class="rec-size">7.35 GB · ISO image</span>
+      <a class="btn btn-primary" href="https://github.com/ChaldS-mods/ChaldOS-Uranus/actions/runs/26099456692/artifacts/7085196075">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24"><path d="M12 3v13M5 13l7 7 7-7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Download KDE NVIDIA Open
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ALL DOWNLOADS -->
+<section id="download">
+  <p class="sec-label">// All Editions</p>
+  <h2 class="sec-title">Every build, one place</h2>
+  <p class="sec-sub">All editions include KDE Plasma. GNOME variants also available.</p>
+
+  <div class="dl-wrap">
+    <div class="dl-head">
+      <h3>ChaldOS-Uranus — Latest build</h3>
+      <span class="badge badge-stable">stable</span>
+    </div>
+
+    <!-- KDE -->
+    <div class="dl-row">
+      <div class="dl-info">
+        <svg width="22" height="22" fill="none" viewBox="0 0 24 24" style="color:var(--teal);flex-shrink:0"><rect x="3" y="4" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M8 20h8M12 18v2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+        <div>
+          <div class="dl-name">ChaldOS KDE (Standard)</div>
+          <div class="dl-meta">6.82 GB · AMD / Intel GPU · Recommended</div>
+        </div>
+      </div>
+      <a class="btn btn-primary btn-sm" href="https://github.com/ChaldS-mods/ChaldOS-Uranus/actions/runs/26099456692/artifacts/7085240637">
+        <svg width="13" height="13" fill="none" viewBox="0 0 24 24"><path d="M12 3v13M5 13l7 7 7-7" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Download
+      </a>
+    </div>
+
+    <div class="dl-row">
+      <div class="dl-info">
+        <svg width="22" height="22" fill="none" viewBox="0 0 24 24" style="color:var(--text2);flex-shrink:0"><rect x="3" y="4" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M8 20h8M12 18v2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+        <div>
+          <div class="dl-name">ChaldOS GNOME (Standard)</div>
+          <div class="dl-meta">5.90 GB · AMD / Intel GPU</div>
+        </div>
+      </div>
+      <a class="btn btn-secondary btn-sm" href="https://github.com/ChaldS-mods/ChaldOS-Uranus/actions/runs/26099456692/artifacts/7085007294">
+        <svg width="13" height="13" fill="none" viewBox="0 0 24 24"><path d="M12 3v13M5 13l7 7 7-7" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Download
+      </a>
+    </div>
+
+    <!-- NVIDIA -->
+    <div class="dl-row">
+      <div class="dl-info">
+        <svg width="22" height="22" fill="none" viewBox="0 0 24 24" style="color:var(--teal);flex-shrink:0"><rect x="2" y="6" width="20" height="12" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M7 12h10M7 9v6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <div>
+          <div class="dl-name">ChaldOS KDE (NVIDIA)</div>
+          <div class="dl-meta">7.47 GB · NVIDIA proprietary driver</div>
+        </div>
+      </div>
+      <a class="btn btn-secondary btn-sm" href="https://github.com/ChaldS-mods/ChaldOS-Uranus/actions/runs/26099456692/artifacts/7085180448">
+        <svg width="13" height="13" fill="none" viewBox="0 0 24 24"><path d="M12 3v13M5 13l7 7 7-7" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Download
+      </a>
+    </div>
+
+    <div class="dl-row">
+      <div class="dl-info">
+        <svg width="22" height="22" fill="none" viewBox="0 0 24 24" style="color:var(--text2);flex-shrink:0"><rect x="2" y="6" width="20" height="12" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M7 12h10M7 9v6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <div>
+          <div class="dl-name">ChaldOS GNOME (NVIDIA)</div>
+          <div class="dl-meta">6.55 GB · NVIDIA proprietary driver</div>
+        </div>
+      </div>
+      <a class="btn btn-secondary btn-sm" href="https://github.com/ChaldS-mods/ChaldOS-Uranus/actions/runs/26099456692/artifacts/7085047837">
+        <svg width="13" height="13" fill="none" viewBox="0 0 24 24"><path d="M12 3v13M5 13l7 7 7-7" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Download
+      </a>
+    </div>
+
+    <!-- NVIDIA Open -->
+    <div class="dl-row">
+      <div class="dl-info">
+        <svg width="22" height="22" fill="none" viewBox="0 0 24 24" style="color:var(--teal);flex-shrink:0"><rect x="2" y="6" width="20" height="12" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M12 9v6M9 12h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <div>
+          <div class="dl-name">ChaldOS KDE (NVIDIA Open)</div>
+          <div class="dl-meta">7.35 GB · NVIDIA open-source module</div>
+        </div>
+      </div>
+      <a class="btn btn-secondary btn-sm" href="https://github.com/ChaldS-mods/ChaldOS-Uranus/actions/runs/26099456692/artifacts/7085196075">
+        <svg width="13" height="13" fill="none" viewBox="0 0 24 24"><path d="M12 3v13M5 13l7 7 7-7" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Download
+      </a>
+    </div>
+
+    <div class="dl-row">
+      <div class="dl-info">
+        <svg width="22" height="22" fill="none" viewBox="0 0 24 24" style="color:var(--text2);flex-shrink:0"><rect x="2" y="6" width="20" height="12" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M12 9v6M9 12h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <div>
+          <div class="dl-name">ChaldOS GNOME (NVIDIA Open)</div>
+          <div class="dl-meta">6.44 GB · NVIDIA open-source module</div>
+        </div>
+      </div>
+      <a class="btn btn-secondary btn-sm" href="https://github.com/ChaldS-mods/ChaldOS-Uranus/actions/runs/26099456692/artifacts/7085053110">
+        <svg width="13" height="13" fill="none" viewBox="0 0 24 24"><path d="M12 3v13M5 13l7 7 7-7" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Download
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<!-- SPECS -->
+<section id="specs">
+  <p class="sec-label">// System Requirements</p>
+  <h2 class="sec-title">What you need</h2>
+  <p class="sec-sub">Low requirements — runs well on modest hardware.</p>
+
+  <div class="specs-grid">
+
+    <!-- MINIMUM -->
+    <div class="specs-col">
+      <div class="specs-col-header specs-col-header--min">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Minimum
+      </div>
+      <div class="sc">
+        <div class="sc-label">CPU</div>
+        <div class="sc-value">x86_64, 2 cores @ 2 GHz</div>
+      </div>
+      <div class="sc">
+        <div class="sc-label">RAM</div>
+        <div class="sc-value">4 GB</div>
+      </div>
+      <div class="sc">
+        <div class="sc-label">Storage</div>
+        <div class="sc-value">50 GB free space</div>
+      </div>
+      <div class="sc">
+        <div class="sc-label">GPU</div>
+        <div class="sc-value">Any GPU with Mesa or NVIDIA drivers</div>
+      </div>
+      <div class="sc">
+        <div class="sc-label">Boot</div>
+        <div class="sc-value">UEFI required</div>
+      </div>
+      <div class="sc">
+        <div class="sc-label">Internet</div>
+        <div class="sc-value">Not required</div>
+      </div>
+      <div class="sc sc--optional">
+        <div class="sc-label">Electricity <span class="sc-optional-tag">optional</span></div>
+        <div class="sc-value">Battery or UPS will do</div>
+      </div>
+    </div>
+
+    <!-- RECOMMENDED -->
+    <div class="specs-col specs-col--rec">
+      <div class="specs-col-header specs-col-header--rec">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+        Recommended
+      </div>
+      <div class="sc">
+        <div class="sc-label">CPU</div>
+        <div class="sc-value">x86_64, 6+ cores @ 3.5 GHz</div>
+      </div>
+      <div class="sc">
+        <div class="sc-label">RAM</div>
+        <div class="sc-value">16 GB DDR4/DDR5</div>
+      </div>
+      <div class="sc">
+        <div class="sc-label">Storage</div>
+        <div class="sc-value">100 GB+ NVMe SSD</div>
+      </div>
+      <div class="sc">
+        <div class="sc-label">GPU</div>
+        <div class="sc-value">Dedicated GPU (NVIDIA RTX / AMD RX)</div>
+      </div>
+      <div class="sc">
+        <div class="sc-label">Boot</div>
+        <div class="sc-value">UEFI + Secure Boot off</div>
+      </div>
+      <div class="sc">
+        <div class="sc-label">Internet</div>
+        <div class="sc-value">Broadband for updates &amp; gaming</div>
+      </div>
+      <div class="sc sc--optional">
+        <div class="sc-label">Electricity <span class="sc-optional-tag">optional</span></div>
+        <div class="sc-value">Stable 220V / 110V recommended</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- TERMINAL -->
+<div class="divider"></div>
+<section id="terminal" style="max-width:860px">
+  <p class="sec-label">// Interactive Shell</p>
+  <h2 class="sec-title">Try ChaldOS</h2>
+  <p class="sec-sub">A taste of the terminal. Type <code style="font-family:'Space Mono',monospace;font-size:.85em;color:var(--teal);background:rgba(0,200,200,.08);padding:2px 7px;border-radius:5px">help</code> to get started.</p>
+
+  <div class="term-wrap">
+    <div class="term-bar">
+      <div class="term-dots">
+        <span class="term-dot" style="background:#ff5f57"></span>
+        <span class="term-dot" style="background:#febc2e"></span>
+        <span class="term-dot" style="background:#28c840"></span>
+      </div>
+      <span class="term-title">chaldos@uranus — bash</span>
+      <span class="term-clear" id="term-clear-btn" title="Clear">⌫ clear</span>
+    </div>
+    <div class="term-body" id="term-body">
+      <div class="term-line"><span class="term-prompt">chaldos@uranus</span><span class="term-sep">:</span><span class="term-path">~</span><span class="term-dollar">$</span> <span class="term-cmd-echo">neofetch</span></div>
+      <div class="term-output term-neofetch" id="term-neofetch"></div>
+    </div>
+    <div class="term-input-row">
+      <span class="term-prompt">chaldos@uranus</span><span class="term-sep">:</span><span class="term-path">~</span><span class="term-dollar">$</span>
+      <input class="term-input" id="term-input" type="text" spellcheck="false" autocomplete="off" placeholder="type a command…" autofocus>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">
+    <img id="footer-logo-img" src="" alt="">
+    ChaldOS
+  </div>
+  <p><a href="https://github.com/ChaldS-mods/ChaldOS-Uranus">GitHub</a> · <a href="https://github.com/ChaldS-mods/ChaldOS-Uranus/issues">Report an issue</a></p>
+  <p style="margin-top:.7rem;font-size:.78rem;opacity:.4">ChaldOS-Uranus · Open source · Built with ❤️ by the community</p>
+</footer>
+
+<script>
+// ── EMBED LOGO ──
+const LOGO = 'data:image/png;base64,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';
+document.getElementById('nav-logo-img').src = LOGO;
+document.getElementById('hero-logo-img').src = LOGO;
+document.getElementById('footer-logo-img').src = LOGO;
+
+// ── STARFIELD ──
+const canvas = document.getElementById('starfield');
+const ctx = canvas.getContext('2d');
+function resize(){ canvas.width = window.innerWidth; canvas.height = document.body.scrollHeight }
+resize();
+const STARS = 300;
+const stars = Array.from({length:STARS},()=>({
+  x:Math.random()*canvas.width, y:Math.random()*canvas.height,
+  r:Math.random()*1.3+.2, alpha:Math.random()*.65+.1,
+  speed:Math.random()*.5+.04, phase:Math.random()*Math.PI*2
+}));
+function drawStars(t){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  for(const s of stars){
+    const a = s.alpha*(0.65+0.35*Math.sin(t*s.speed+s.phase));
+    ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+    ctx.fillStyle=`rgba(255,255,255,${a})`; ctx.fill();
+  }
+  requestAnimationFrame(drawStars);
+}
+requestAnimationFrame(drawStars);
+window.addEventListener('resize',resize);
+
+// ── GPU AUTO-DETECT ──
+function detectGpu(){
+  try{
+    const c=document.createElement('canvas');
+    const gl=c.getContext('webgl')||c.getContext('experimental-webgl');
+    if(!gl) return 'unknown';
+    const ext=gl.getExtension('WEBGL_debug_renderer_info');
+    if(!ext) return 'unknown';
+    const r=gl.getParameter(ext.UNMASKED_RENDERER_WEBGL)||'';
+    if(/nvidia/i.test(r)) return 'nvidia';
+    if(/amd|radeon|intel/i.test(r)) return 'amd';
+    return 'unknown';
+  }catch(e){ return 'unknown' }
+}
+
+const gpu = detectGpu();
+const banner = document.getElementById('smart-banner');
+const bannerText = document.getElementById('banner-text');
+
+function selectGpu(type, el){
+  document.querySelectorAll('.gpu-btn').forEach(b=>b.classList.remove('active'));
+  if(el) el.classList.add('active');
+  document.querySelectorAll('.rec-box').forEach(b=>b.classList.remove('show'));
+  const box = document.getElementById('rec-'+type);
+  if(box) box.classList.add('show');
+}
+
+if(gpu==='nvidia'){
+  bannerText.textContent='NVIDIA GPU detected — we recommend the NVIDIA edition';
+  selectGpu('nvidia', document.getElementById('btn-nvidia'));
+}else if(gpu==='amd'){
+  bannerText.textContent='AMD/Intel GPU detected — we recommend the Standard edition';
+  selectGpu('amd', document.getElementById('btn-amd'));
+}else{
+  bannerText.textContent='Pick your GPU below';
+  banner.style.display='none';
+}
+
+// ── TERMINAL ──
+(function(){
+  const body = document.getElementById('term-body');
+  const input = document.getElementById('term-input');
+  const clearBtn = document.getElementById('term-clear-btn');
+
+  const ART = `  ██████╗██╗  ██╗
+ ██╔════╝██║  ██║
+ ██║     ███████║
+ ██║     ██╔══██║
+ ╚██████╗██║  ██║
+  ╚═════╝╚═╝  ╚═╝`;
+
+  const COLORS = ['#00c8c8','#009999','#7dc4e4','#a8e6a3','#febc2e','#ff7b7b','#b0a0ff','#ffffff'];
+
+  // Build neofetch block
+  const nf = document.getElementById('term-neofetch');
+  const art = document.createElement('div');
+  art.className = 'term-nf-art';
+  art.textContent = ART;
+  const info = document.createElement('div');
+  info.className = 'term-nf-info';
+  info.innerHTML = `
+    <div class="nf-title">chaldos@uranus</div>
+    <div class="nf-row">──────────────────</div>
+    <div class="nf-row"><b>OS:</b> ChaldOS Uranus (Early Access)</div>
+    <div class="nf-row"><b>Base:</b> Fedora Atomic</div>
+    <div class="nf-row"><b>Kernel:</b> 6.x (patched)</div>
+    <div class="nf-row"><b>Shell:</b> bash 5.2</div>
+    <div class="nf-row"><b>DE:</b> KDE Plasma / GNOME</div>
+    <div class="nf-row"><b>WM:</b> KWin / Mutter</div>
+    <div class="nf-row"><b>Packages:</b> rpm-ostree + flatpak</div>
+    <div class="nf-row"><b>Terminal:</b> ChaldOS Web Shell v1.0</div>
+    <div class="nf-row"><b>Uptime:</b> just booted ✨</div>
+    <div class="term-nf-colors">${COLORS.map(c=>`<span style="background:${c}"></span>`).join('')}</div>`;
+  nf.appendChild(art);
+  nf.appendChild(info);
+
+  const history = [];
+  let histIdx = -1;
+
+  const COMMANDS = {
+    help() {
+      return {cls:'info', text:
+`<b>Available commands:</b>
+
+  <b>about</b>        — What is ChaldOS?
+  <b>features</b>    — List key features
+  <b>specs</b>       — System requirements
+  <b>install</b>     — How to install
+  <b>neofetch</b>    — System info
+  <b>uname -a</b>    — Kernel info
+  <b>ls</b>          — List directory
+  <b>cat readme</b>  — Read the readme
+  <b>uptime</b>      — How long running
+  <b>whoami</b>      — Who are you?
+  <b>echo [text]</b> — Echo something
+  <b>sl</b>          — 🚂
+  <b>sudo rm -rf /</b> — Don't
+  <b>clear</b>       — Clear terminal`};
+    },
+    about() {
+      return {cls:'info', text:
+`<b>ChaldOS</b> is a custom Linux distribution built for <b>gamers</b> and power users.
+
+  Built on <b>Fedora Atomic</b> with an immutable ostree base — your system
+  stays stable, and you can always roll back to a working state.
+
+  Pre-loaded with Steam, Proton, MangoHud, vkBasalt and a patched
+  kernel with HDR support. Available with KDE Plasma or GNOME.
+
+  <b>Status:</b> Early Access (Uranus Edition)
+  <b>GitHub:</b> github.com/ChaldS-mods/ChaldOS-Uranus`};
+    },
+    features() {
+      return {cls:'ok', text:
+`<b>Key features:</b>
+
+  ✓  Gaming-ready out of the box (Steam, Proton, MangoHud)
+  ✓  Immutable base — roll back any time
+  ✓  KDE Plasma + GNOME editions
+  ✓  Patched kernel (HDR, extra hw compat)
+  ✓  Flatpak + Distrobox support
+  ✓  Fully open source`};
+    },
+    specs() {
+      return {cls:'info', text:
+`<b>System Requirements:</b>
+
+            Minimum          Recommended
+  CPU       2 cores 2GHz     6+ cores 3.5GHz
+  RAM       4 GB             16 GB DDR4/DDR5
+  Storage   50 GB            100 GB+ NVMe SSD
+  GPU       Any w/ Mesa      Dedicated (RTX/RX)
+  Boot      UEFI             UEFI + SB off
+  Internet  Not required     Broadband
+  Power     Optional         Recommended`};
+    },
+    install() {
+      return {cls:'ok', text:
+`<b>Installation:</b>
+
+  1. Download the ISO for your GPU from the Download section
+  2. Flash it to a USB drive:
+       dd if=chaldos.iso of=/dev/sdX bs=4M status=progress
+     or use Balena Etcher / Ventoy
+  3. Boot from USB (disable Secure Boot in UEFI)
+  4. Follow the Anaconda installer
+  5. 🚀 Enjoy ChaldOS!
+
+  Note: UEFI required. Legacy BIOS not supported.`};
+    },
+    neofetch() {
+      return {cls:'', text:'', neofetch: true};
+    },
+    'uname -a'() {
+      return {cls:'', text:'Linux chaldos 6.12.0-chald1-patched #1 SMP PREEMPT_DYNAMIC x86_64 GNU/Linux'};
+    },
+    ls() {
+      return {cls:'info', text:'<b>Desktop</b>  <b>Downloads</b>  <b>Games</b>  readme  .bashrc  .config'};
+    },
+    'cat readme'() {
+      return {cls:'info', text:
+`<b>README — ChaldOS Uranus Edition</b>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Welcome to ChaldOS! This is an early access release.
+Bugs are expected. Reports welcome on GitHub Issues.
+
+Built with ❤️ by the community.`};
+    },
+    uptime() {
+      const s = Math.floor(performance.now()/1000);
+      const m = Math.floor(s/60), sec = s%60;
+      return {cls:'', text:`up ${m} min, ${sec} sec — 1 user, load average: 0.42, 0.13, 0.05`};
+    },
+    whoami() {
+      return {cls:'ok', text:'root  (you can do anything here — it\'s a demo 😈)'};
+    },
+    sl() {
+      return {cls:'ok', text:'🚂💨  choo choo! (try installing sl on ChaldOS via flatpak)'};
+    },
+    'sudo rm -rf /'() {
+      return {cls:'err', text:'rm: it is dangerous to operate recursively on \'/\'\n(but nice try 😄 — ChaldOS is immutable anyway)'};
+    },
+    date() {
+      return {cls:'', text: new Date().toString()};
+    },
+    pwd() {
+      return {cls:'', text:'/home/user'};
+    },
+  };
+
+  function printNeofetch() {
+    const nfClone = document.createElement('div');
+    nfClone.className = 'term-output term-neofetch';
+    const artC = document.createElement('div');
+    artC.className = 'term-nf-art';
+    artC.textContent = ART;
+    const infoC = info.cloneNode(true);
+    nfClone.appendChild(artC);
+    nfClone.appendChild(infoC);
+    body.appendChild(nfClone);
+  }
+
+  function printLine(prompt, cmd) {
+    const row = document.createElement('div');
+    row.className = 'term-line';
+    row.innerHTML = `<span class="term-prompt">chaldos@uranus</span><span class="term-sep">:</span><span class="term-path">~</span><span class="term-dollar">$</span> <span class="term-cmd-echo">${escHtml(cmd)}</span>`;
+    body.appendChild(row);
+  }
+
+  function printOutput(cls, text) {
+    const el = document.createElement('div');
+    el.className = `term-output ${cls}`;
+    el.innerHTML = text;
+    body.appendChild(el);
+  }
+
+  function escHtml(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') }
+
+  function scrollBottom(){ body.scrollTop = body.scrollHeight; }
+
+  function run(raw) {
+    const cmd = raw.trim();
+    if(!cmd) return;
+    history.unshift(cmd);
+    histIdx = -1;
+    printLine('chaldos@uranus', cmd);
+
+    if(cmd === 'clear'){ body.innerHTML = ''; scrollBottom(); return; }
+
+    // echo
+    if(cmd.startsWith('echo ')) {
+      printOutput('', escHtml(cmd.slice(5)));
+      scrollBottom(); return;
+    }
+
+    const handler = COMMANDS[cmd.toLowerCase()] || COMMANDS[cmd];
+    if(handler) {
+      const res = handler();
+      if(res.neofetch) { printNeofetch(); }
+      else if(res.text) { printOutput(res.cls||'', res.text); }
+    } else {
+      printOutput('err', `bash: <b>${escHtml(cmd)}</b>: command not found — try <b>help</b>`);
+    }
+    scrollBottom();
+  }
+
+  input.addEventListener('keydown', e => {
+    if(e.key === 'Enter') {
+      const v = input.value; input.value = '';
+      run(v);
+    } else if(e.key === 'ArrowUp') {
+      e.preventDefault();
+      if(histIdx < history.length-1){ histIdx++; input.value = history[histIdx]; }
+    } else if(e.key === 'ArrowDown') {
+      e.preventDefault();
+      if(histIdx > 0){ histIdx--; input.value = history[histIdx]; }
+      else { histIdx = -1; input.value = ''; }
+    } else if(e.key === 'l' && e.ctrlKey) {
+      e.preventDefault(); body.innerHTML = ''; scrollBottom();
+    }
+  });
+
+  // click anywhere on terminal focuses input
+  document.querySelector('.term-wrap').addEventListener('click', () => input.focus());
+  clearBtn.addEventListener('click', () => { body.innerHTML = ''; scrollBottom(); });
+})();
+
+const ham = document.getElementById('hamburger');
+const mob = document.getElementById('mobile-menu');
+ham.addEventListener('click', () => {
+  ham.classList.toggle('open');
+  mob.classList.toggle('open');
+});
+document.querySelectorAll('.mobile-menu a').forEach(a => {
+  a.addEventListener('click', () => {
+    ham.classList.remove('open');
+    mob.classList.remove('open');
+  });
+});
+</script>
+</body>
+</html>
