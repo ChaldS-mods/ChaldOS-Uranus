@@ -554,7 +554,7 @@ jobs:
           echo "sbom_digest=${sbom_digest}" >> $GITHUB_OUTPUT
 
       - name: Sign SBOM OCI Artifact
-        if: github.event_name != 'pull_request'
+        if: false
         env:
           COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
           IMAGE: ${{ steps.base.outputs.output_image }}
