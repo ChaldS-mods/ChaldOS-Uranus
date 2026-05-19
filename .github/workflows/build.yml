@@ -118,7 +118,7 @@ jobs:
             echo "install_nvidia=true" >> "$GITHUB_OUTPUT"
           elif [[ "$IMAGE" == *"nvidia"* ]]; then
             echo "container_target=chaldos-nvidia" >> "$GITHUB_OUTPUT"
-            echo "nvidia_base=bazzite" >> "$GITHUB_OUTPUT"
+            echo "nvidia_base=chaldos" >> "$GITHUB_OUTPUT"
             echo "install_nvidia=true" >> "$GITHUB_OUTPUT"
           elif [[ "$IMAGE" == *"deck"* ]]; then
             echo "container_target=chaldos-deck" >> "$GITHUB_OUTPUT"
