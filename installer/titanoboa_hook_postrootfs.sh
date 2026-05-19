@@ -177,44 +177,6 @@ qrencode -o "$SECUREBOOT_DOC_URL_QR" "$SECUREBOOT_DOC_URL"
 ### Livecds runtime tweaks ###
 
 # Disable services
-(
-    set +e
-    for s in \
-        rpm-ostree-countme.service \
-        tailscaled.service \
-        bazzite-hardware-setup.service \
-        ublue-hardware-setup.service \
-        bootloader-update.service \
-        brew-upgrade.timer \
-        brew-update.timer \
-        brew-setup.service \
-        rpm-ostreed-automatic.timer \
-        uupd.timer \
-        ublue-guest-user.service \
-        ublue-os-media-automount.service \
-        ublue-system-setup.service \
-        bazzite-flatpak-manager.service \
-        ublue-flatpak-manager.service \
-        flatpak-add-fedora-repos.service \
-        greenboot-set-rollback-trigger.service \
-        greenboot-healthcheck.service \
-        input-remapper.service \
-        switcheroo-control.service \
-        check-sb-key.service; do
-        if systemctl list-unit-files "$s" >/dev/null 2>&1; then
-            systemctl disable "$s"
-        fi
-    done
-
-    for s in \
-        podman-auto-update.timer \
-        bazzite-user-setup.service \
-        ublue-user-setup.service; do
-        if systemctl --global list-unit-files "$s" >/dev/null 2>&1; then
-            systemctl --global disable "$s"
-        fi
-    done
-)
 
 ### Desktop-enviroment specific tweaks ###
 # Setup script to show dialog popups at login
@@ -271,12 +233,6 @@ dnf5 -yq remove steam lutris bazaar waydroid || :
 # Don't check for verified image
 rm -vf /etc/profile.d/verify_motd.sh
 
-(
-    # wallpaper already in system_files
-    
-    
-    
-)
 
 # Enable on-screen keyboard
 if [[ $imageref == *-deck* ]]; then
