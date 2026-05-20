@@ -408,7 +408,7 @@ RUN --mount=type=cache,dst=/var/cache \
         sed -i '$r /usr/share/plasma/shells/org.kde.plasma.desktop/contents/updates/bazzite-pins.js' /usr/share/plasma/layout-templates/org.kde.plasma.desktop.defaultPanel/contents/layout.js && \
         ln -sf /usr/share/wallpapers/chaldos-uranus.png /usr/share/backgrounds/default.png && \
         ln -sf /usr/share/wallpapers/chaldos-uranus.png /usr/share/backgrounds/default-dark.png && \
-        rm -f /usr/share/backgrounds/default.xml && \
+        rm -f /usr/share/backgrounds/default.xml
     ; else \
         dnf5 -y install \
             nautilus-gsconnect \
