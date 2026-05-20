@@ -542,6 +542,7 @@ jobs:
           DIGEST: ${{ steps.push.outputs.digest }}
           SBOM: ${{ steps.generate-sbom.outputs.SBOM }}
         run: |
+          if [ -z "${DIGEST}" ]; then echo "No digest, skipping SBOM upload"; exit 0; fi
           cd "$(dirname "${SBOM}")"
           oras attach \
             --artifact-type application/vnd.spdx+json \
