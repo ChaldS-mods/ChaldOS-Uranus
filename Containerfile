@@ -288,7 +288,6 @@ RUN --mount=type=cache,dst=/var/cache \
         cage \
         wlr-randr \
         gmodpatchtool \
-        bazzite-portal \
         ls-iommu && \
     ln -s /dev/null /etc/NetworkManager/dispatcher.d/04-iscsi && \
     systemctl mask iscsi && \

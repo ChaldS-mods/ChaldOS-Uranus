@@ -8,3 +8,6 @@ grub2:
     - name: "Launch ChaldOS Installer (Basic Graphics Mode)"
       linux: "/images/pxeboot/vmlinuz quiet rhgb root=live:CDLABEL=ChaldOS-Live enforcing=0 rd.live.image nomodeset"
       initrd: "/images/pxeboot/initrd.img"
+    - name: "Launch ChaldOS Installer (No Plymouth)"
+      linux: "/images/pxeboot/vmlinuz root=live:CDLABEL=ChaldOS-Live enforcing=0 rd.live.image plymouth.enable=0"
+      initrd: "/images/pxeboot/initrd.img"
