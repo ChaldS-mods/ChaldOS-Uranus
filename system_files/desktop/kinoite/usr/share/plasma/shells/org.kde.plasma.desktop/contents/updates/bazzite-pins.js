@@ -1,19 +1,19 @@
 const allPanels = panels();
-
 for (let i = 0; i < allPanels.length; ++i) {
     const panel = allPanels[i];
     const widgets = panel.widgets();
-
     for (let j = 0; j < widgets.length; ++j) {
         const widget = widgets[j];
-
+        // Иконка меню пуска
+        if (widget.type === "org.kde.plasma.kickoff" || widget.type === "org.kde.plasma.applicationlauncher") {
+            widget.currentConfigGroup = ["General"];
+            widget.writeConfig("icon", "/usr/share/pixmaps/system-logo-white.png");
+            widget.reloadConfig();
+        }
+        // Пины на панели задач
         if (widget.type === "org.kde.plasma.icontasks") {
             widget.currentConfigGroup = ["General"];
-
-            // Read the current launchers value
             const currentLaunchers = widget.readConfig("launchers", "");
-
-            // Only set our default if launchers is empty
             if (!currentLaunchers || currentLaunchers.trim() === "") {
                 widget.writeConfig("launchers", [
                     "preferred://browser",

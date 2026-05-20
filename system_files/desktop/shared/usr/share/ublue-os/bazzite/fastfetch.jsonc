@@ -4,44 +4,35 @@
         "type": "file",
         "source": "/usr/share/ublue-os/bazzite/logo.txt",
         "color": {
-            "1": "94",
-            "2": "47",
-            "3": "95",
-            "4": "0",
-            "5": "8",
-            "6": "55"
+            "1": "38;2;33;144;164",
+            "2": "38;2;255;255;255",
+            "3": "38;2;150;220;220"
         }
     },
     "display": {
-        "separator": "  ",
+        "separator": "  ",
         "color": {
-            "keys": "light_blue"
-        },
+            "keys": "38;2;33;144;164"
+        }
     },
     "modules": [
         {
             "type": "title",
-            "key": " ",
+            "key": " ",
             "color": {
-                "user": "light_blue",
+                "user": "38;2;33;144;164",
                 "at": "white",
-                "host": "magenta"
+                "host": "38;2;150;220;220"
             }
         },
         "break",
         {
-            "type": "command",
-            "key": " 󱋩",
-            "text": "/usr/libexec/bazzite-fetch-image"
-        },
-        {
             "type": "os",
-            "key": " 󰣛",
-            "format": "{pretty-name}"
+            "key": " 󰣛"
         },
         {
             "type": "kernel",
-            "key": " ",
+            "key": " ",
             "format": "{1} {2}"
         },
         {
@@ -63,24 +54,16 @@
         },
         {
             "type": "memory",
-            "key": " "
+            "key": " "
         },
         {
             "type": "disk",
-            "key": " ",
+            "key": " ",
             "hideFS": "overlay"
         },
         {
             "type": "display",
             "key": " 󰍹"
-        },
-        {
-            "type": "battery",
-            "key": " "
-        },
-        {
-            "type": "gamepad",
-            "key": " 󰖺"
         },
         "break",
         {
@@ -89,15 +72,15 @@
         },
         {
             "type": "wm",
-            "key": " "
+            "key": " "
         },
         {
             "type": "shell",
-            "key": " "
+            "key": " "
         },
         {
             "type": "terminal",
-            "key": " "
+            "key": " "
         },
         {
             "type": "packages",

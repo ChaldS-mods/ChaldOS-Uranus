@@ -407,11 +407,9 @@ RUN --mount=type=cache,dst=/var/cache \
             kde-partitionmanager \
             plasma-discover && \
         sed -i '$r /usr/share/plasma/shells/org.kde.plasma.desktop/contents/updates/bazzite-pins.js' /usr/share/plasma/layout-templates/org.kde.plasma.desktop.defaultPanel/contents/layout.js && \
-        ln -sf /usr/share/wallpapers/convergence.jxl /usr/share/backgrounds/default.jxl && \
-        ln -sf /usr/share/wallpapers/convergence.jxl /usr/share/backgrounds/default-dark.jxl && \
+        ln -sf /usr/share/wallpapers/chaldos-uranus.png /usr/share/backgrounds/default.png && \
+        ln -sf /usr/share/wallpapers/chaldos-uranus.png /usr/share/backgrounds/default-dark.png && \
         rm -f /usr/share/backgrounds/default.xml && \
-        mkdir -p /usr/share/wallpapers/bazzite/convergence/contents/images && \
-        ln -s /usr/share/wallpapers/convergence.jxl /usr/share/wallpapers/bazzite/convergence/contents/images/3940x2160.jxl \
     ; else \
         dnf5 -y install \
             nautilus-gsconnect \
@@ -625,8 +623,8 @@ RUN --mount=type=cache,dst=/var/cache \
     ; else \
         dnf5 -y install \
             sddm && \
-        ln -sf /usr/share/wallpapers/convergence.jxl /usr/share/backgrounds/default.jxl && \
-        ln -sf /usr/share/wallpapers/convergence.jxl /usr/share/backgrounds/default-dark.jxl && \
+        ln -sf /usr/share/wallpapers/chaldos-uranus.png /usr/share/backgrounds/default.png && \
+        ln -sf /usr/share/wallpapers/chaldos-uranus.png /usr/share/backgrounds/default-dark.png && \
         rm -f /usr/share/backgrounds/default.xml && \
         dnf5 -y remove \
             malcontent-control \
