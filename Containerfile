@@ -441,6 +441,9 @@ RUN --mount=type=cache,dst=/var/cache \
     dnf5 -y install \
         rom-properties-utils && \
     /ctx/cleanup
+# Replace Bazzite splash logo with ChaldOS
+RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
+    /ctx/replace-splash-logo
 
 # ublue-os-media-automount-udev, mount non-removable device partitions automatically under /media/media-automount/
 RUN --mount=type=cache,dst=/var/cache \
