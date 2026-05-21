@@ -592,3 +592,15 @@ jobs:
   #         token: ${{ secrets.PAT }}
   #         repository: ublue-os/bazzite-dx
   #         event-type: build
+  build_iso:
+    name: Build ISOs
+    needs: [generate_release]
+    if: github.event_name != 'pull_request'
+    permissions:
+      contents: write
+      packages: write
+      id-token: write
+      attestations: write
+      artifact-metadata: write
+    secrets: inherit
+    uses: ./.github/workflows/build_iso.yml

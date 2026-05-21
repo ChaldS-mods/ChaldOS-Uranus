@@ -8,15 +8,15 @@ from typing import Any
 import re
 from collections import defaultdict
 
-REGISTRY = "ghcr.io/ublue-os/"
+REGISTRY = "ghcr.io/chalds-mods/"
 
 IMAGES = [
-    "bazzite",
-    "bazzite-gnome",
-    "bazzite-nvidia",
-    "bazzite-gnome-nvidia",
-    "bazzite-nvidia-open",
-    "bazzite-gnome-nvidia-open",
+    "chaldos",
+    "chaldos-gnome",
+    "chaldos-nvidia",
+    "chaldos-gnome-nvidia",
+    "chaldos-nvidia-open",
+    "chaldos-gnome-nvidia-open",
 ]
 
 RETRIES = 3
@@ -43,7 +43,7 @@ OTHER_NAMES = {
 COMMITS_FORMAT = (
     "### Commits\n| Hash | Subject | Author |\n| --- | --- | --- |{commits}\n\n"
 )
-COMMIT_FORMAT = "\n| **[{short}](https://github.com/ublue-os/bazzite/commit/{hash})** | {subject} | {author} |"
+COMMIT_FORMAT = "\n| **[{short}](https://github.com/ChaldS-mods/ChaldOS-Uranus/commit/{hash})** | {subject} | {author} |"
 
 CHANGELOG_TITLE = "{tag}: {pretty}"
 CHANGELOG_FORMAT = """\

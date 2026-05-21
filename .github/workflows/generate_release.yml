@@ -51,3 +51,13 @@ jobs:
           body_path: ./changelog.md
           make_latest: ${{ steps.get-target.outputs.target == 'stable' }}
           prerelease: ${{ steps.get-target.outputs.target != 'stable' }}
+      - name: Download ISO Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: ./iso-artifacts
+          merge-multiple: true
+      - name: Attach ISOs to Release
+        uses: softprops/action-gh-release@b4309332981a82ec1c5618f44dd2e27cc8bfbfda # v3
+        with:
+          tag_name: ${{ steps.generate-release.outputs.tag }}
+          files: ./iso-artifacts/**/*.iso
