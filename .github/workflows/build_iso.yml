@@ -216,11 +216,115 @@ jobs:
           sudo apt-get install -y rclone
           rclone copy $SOURCE_DIR R2:bazzite
 
-  release:
-    name: Generate Release
+
+  upload-mega-1:
+    name: Upload to MEGA account 1
     needs: [build-iso]
     if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
     permissions:
-      contents: write
-    secrets: inherit
-    uses: ./.github/workflows/generate_release.yml
+      contents: read
+      actions: read
+    steps:
+      - name: Install megatools
+        run: sudo apt-get install -y megatools
+
+      - name: Parse MEGA credentials
+        id: creds
+        env:
+          MEGA: ${{ secrets.MEGA }}
+        run: |
+          mapfile -t lines <<< "$MEGA"
+          echo "email=${lines[0]}" >> $GITHUB_OUTPUT
+          echo "password=${lines[1]}" >> $GITHUB_OUTPUT
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: chaldos-gnome-*-stable-*
+          path: ./mega1
+          merge-multiple: true
+
+      - name: Upload to MEGA
+        run: |
+          megamkdir -u "${{ steps.creds.outputs.email }}" -p "${{ steps.creds.outputs.password }}" /Root/ChaldOS || true
+          for f in ./mega1/*.iso; do
+            megaput -u "${{ steps.creds.outputs.email }}" -p "${{ steps.creds.outputs.password }}" --path /Root/ChaldOS/ "$f"
+          done
+
+  upload-mega-2:
+    name: Upload to MEGA account 2
+    needs: [build-iso]
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - name: Install megatools
+        run: sudo apt-get install -y megatools
+
+      - name: Parse MEGA credentials
+        id: creds
+        env:
+          MEGA: ${{ secrets.MEGA }}
+        run: |
+          mapfile -t lines <<< "$MEGA"
+          echo "email=${lines[2]}" >> $GITHUB_OUTPUT
+          echo "password=${lines[3]}" >> $GITHUB_OUTPUT
+
+      - name: Download artifacts - stable
+        uses: actions/download-artifact@v4
+        with:
+          pattern: chaldos-stable-*
+          path: ./mega2
+          merge-multiple: true
+
+      - name: Download artifacts - nvidia-open
+        uses: actions/download-artifact@v4
+        with:
+          pattern: chaldos-nvidia-open-stable-*
+          path: ./mega2
+          merge-multiple: true
+
+      - name: Upload to MEGA
+        run: |
+          megamkdir -u "${{ steps.creds.outputs.email }}" -p "${{ steps.creds.outputs.password }}" /Root/ChaldOS || true
+          for f in ./mega2/*.iso; do
+            megaput -u "${{ steps.creds.outputs.email }}" -p "${{ steps.creds.outputs.password }}" --path /Root/ChaldOS/ "$f"
+          done
+
+  upload-mega-3:
+    name: Upload to MEGA account 3
+    needs: [build-iso]
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - name: Install megatools
+        run: sudo apt-get install -y megatools
+
+      - name: Parse MEGA credentials
+        id: creds
+        env:
+          MEGA: ${{ secrets.MEGA }}
+        run: |
+          mapfile -t lines <<< "$MEGA"
+          echo "email=${lines[4]}" >> $GITHUB_OUTPUT
+          echo "password=${lines[5]}" >> $GITHUB_OUTPUT
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: chaldos-nvidia-stable-*
+          path: ./mega3
+          merge-multiple: true
+
+      - name: Upload to MEGA
+        run: |
+          megamkdir -u "${{ steps.creds.outputs.email }}" -p "${{ steps.creds.outputs.password }}" /Root/ChaldOS || true
+          for f in ./mega3/*.iso; do
+            megaput -u "${{ steps.creds.outputs.email }}" -p "${{ steps.creds.outputs.password }}" --path /Root/ChaldOS/ "$f"
+          done

@@ -44,8 +44,16 @@ env:
   REPO_OWNER: ${{ github.repository_owner }}
 
 jobs:
+  clean-mega:
+    name: Clean MEGA before build
+    permissions:
+      contents: read
+    secrets: inherit
+    uses: ./.github/workflows/clean_mega.yml
+
   push-ghcr:
     name: Make
+    needs: [clean-mega]
     runs-on: ubuntu-24.04
     continue-on-error: false
     permissions:

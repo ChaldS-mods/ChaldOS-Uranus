@@ -1,0 +1,37 @@
+name: Clean MEGA
+
+on:
+  workflow_call:
+
+jobs:
+  clean-mega:
+    name: Clean MEGA accounts
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install megatools
+        run: sudo apt-get install -y megatools
+
+      - name: Parse MEGA credentials
+        id: creds
+        env:
+          MEGA: ${{ secrets.MEGA }}
+        run: |
+          mapfile -t lines <<< "$MEGA"
+          echo "email1=${lines[0]}" >> $GITHUB_OUTPUT
+          echo "password1=${lines[1]}" >> $GITHUB_OUTPUT
+          echo "email2=${lines[2]}" >> $GITHUB_OUTPUT
+          echo "password2=${lines[3]}" >> $GITHUB_OUTPUT
+          echo "email3=${lines[4]}" >> $GITHUB_OUTPUT
+          echo "password3=${lines[5]}" >> $GITHUB_OUTPUT
+
+      - name: Clean MEGA account 1
+        run: |
+          megarm -u "${{ steps.creds.outputs.email1 }}" -p "${{ steps.creds.outputs.password1 }}" /Root/ChaldOS || true
+
+      - name: Clean MEGA account 2
+        run: |
+          megarm -u "${{ steps.creds.outputs.email2 }}" -p "${{ steps.creds.outputs.password2 }}" /Root/ChaldOS || true
+
+      - name: Clean MEGA account 3
+        run: |
+          megarm -u "${{ steps.creds.outputs.email3 }}" -p "${{ steps.creds.outputs.password3 }}" /Root/ChaldOS || true
