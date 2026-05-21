@@ -138,7 +138,7 @@ ${container_mgr} run --rm --privileged  \
     IMAGE_REPO="localhost" \
     IMAGE_TAG="${latest}-${git_branch}" \
     ISO_NAME="build/${tag}-${git_branch}.iso" \
-    SECURE_BOOT_KEY_URL='https://github.com/ublue-os/bazzite/raw/main/secure_boot.der' \
+    SECURE_BOOT_KEY_URL='https://github.com/ChaldS-mods/ChaldOS-Uranus/raw/main/secure_boot.der' \
     VARIANT="${variant}" \
     VERSION="${latest}"
 
