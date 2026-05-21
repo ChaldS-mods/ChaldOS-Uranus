@@ -344,7 +344,8 @@ footer a:hover{color:var(--teal);text-decoration:none}
       <div class="sc"><div class="sc-label">GPU</div><div class="sc-value" data-i18n="spec_gpu_min">Any GPU with Mesa or NVIDIA drivers</div></div>
       <div class="sc"><div class="sc-label">Boot</div><div class="sc-value">UEFI</div></div>
       <div class="sc"><div class="sc-label"><span data-i18n="spec_net">Internet</span></div><div class="sc-value" data-i18n="spec_net_no">Not required</div></div>
-      <div class="sc sc--optional"><div class="sc-label"><span data-i18n="spec_elec">Electricity</span> <span class="sc-optional-tag">optional</span></div><div class="sc-value" data-i18n="spec_elec_min">Battery or UPS will do</div></div>
+      <div class="sc sc--optional"><div class="sc-label"><span data-i18n="spec_elec">Electricity</span> <span class="sc-optional-tag" data-i18n="tag_optional">optional</span></div><div class="sc-value" data-i18n="spec_elec_min">Battery or UPS will do</div></div>
+      <div class="sc sc--optional"><div class="sc-label"><span data-i18n="spec_kettle_label">❄️ Охлаждение</span> <span class="sc-optional-tag" data-i18n="tag_required">required</span></div><div class="sc-value" data-i18n="spec_kettle_min">чайник — если перегрелся, вылей на CPU</div></div>
     </div>
     <div class="specs-col specs-col--rec">
       <div class="specs-col-header specs-col-header--rec">
@@ -357,7 +358,8 @@ footer a:hover{color:var(--teal);text-decoration:none}
       <div class="sc"><div class="sc-label">GPU</div><div class="sc-value" data-i18n="spec_gpu_rec">Dedicated GPU (NVIDIA RTX / AMD RX)</div></div>
       <div class="sc"><div class="sc-label">Boot</div><div class="sc-value">UEFI + Secure Boot off</div></div>
       <div class="sc"><div class="sc-label"><span data-i18n="spec_net">Internet</span></div><div class="sc-value" data-i18n="spec_net_yes">Broadband for updates &amp; gaming</div></div>
-      <div class="sc sc--optional"><div class="sc-label"><span data-i18n="spec_elec">Electricity</span> <span class="sc-optional-tag">optional</span></div><div class="sc-value" data-i18n="spec_elec_rec">Stable 220V / 110V recommended</div></div>
+      <div class="sc sc--optional"><div class="sc-label"><span data-i18n="spec_elec">Electricity</span> <span class="sc-optional-tag" data-i18n="tag_optional">optional</span></div><div class="sc-value" data-i18n="spec_elec_rec">Stable 220V / 110V recommended</div></div>
+      <div class="sc sc--optional"><div class="sc-label"><span data-i18n="spec_kettle_label">❄️ Охлаждение</span> <span class="sc-optional-tag" data-i18n="tag_required">required</span></div><div class="sc-value" data-i18n="spec_kettle_rec">RGB не охлаждает, но зато красиво</div></div>
     </div>
   </div>
 </section>
@@ -412,6 +414,8 @@ const TRANSLATIONS = {
     spec_gpu_min:'Any GPU with Mesa or NVIDIA drivers', spec_gpu_rec:'Dedicated GPU (NVIDIA RTX / AMD RX)',
     spec_net_no:'Not required', spec_net_yes:'Broadband for updates & gaming',
     spec_elec:'Electricity', spec_elec_min:'Battery or UPS will do', spec_elec_rec:'Stable 220V / 110V recommended',
+    spec_kettle_label:'❄️ Cooling', spec_kettle_min:'Any kettle — pour on CPU if it overheats', spec_kettle_rec:'AIO liquid cooling (RGB doesn\'t cool but it looks sick)',
+    tag_optional:'optional', tag_required:'required',
     footer_issue:'Report an issue',
     dl_kde_std:'ChaldOS KDE (Standard)', dl_kde_std_meta:'AMD / Intel GPU · Recommended',
     dl_kde_nv:'ChaldOS KDE (NVIDIA)', dl_kde_nv_meta:'NVIDIA proprietary driver',
@@ -453,6 +457,8 @@ const TRANSLATIONS = {
     spec_gpu_min:'Любая GPU с Mesa или драйверами NVIDIA', spec_gpu_rec:'Дискретная GPU (NVIDIA RTX / AMD RX)',
     spec_net_no:'Не требуется', spec_net_yes:'Широкополосный для обновлений и игр',
     spec_elec:'Электричество', spec_elec_min:'Батарея или ИБП подойдут', spec_elec_rec:'Стабильные 220В рекомендуется',
+    spec_kettle_label:'❄️ Охлаждение', spec_kettle_min:'чайник — если перегрелся, вылей на CPU', spec_kettle_rec:'RGB не охлаждает, но зато красиво',
+    tag_optional:'необязательно', tag_required:'обязательно',
     footer_issue:'Сообщить о проблеме',
     dl_kde_std:'ChaldOS KDE (Стандарт)', dl_kde_std_meta:'AMD / Intel · Рекомендуется',
     dl_kde_nv:'ChaldOS KDE (NVIDIA)', dl_kde_nv_meta:'Проприетарный драйвер NVIDIA',
@@ -530,65 +536,51 @@ function selectGpu(type, el){
   note.style.display = (type==='nvidia'||type==='nvidia-open') ? 'block' : 'none';
 }
 
-// ── GITHUB RELEASES ──
-const REPO = 'ChaldS-mods/ChaldOS-Uranus';
-
-// Map asset name patterns to download slot keys
-function classifyAsset(name){
-  const n = name.toLowerCase();
-  if(n.includes('gnome') && n.includes('nvidia-open')) return 'gnome-nvidia-open';
-  if(n.includes('gnome') && n.includes('nvidia'))      return 'gnome-nvidia';
-  if(n.includes('gnome'))                               return 'gnome';
-  if(n.includes('nvidia-open'))                         return 'nvidia-open';
-  if(n.includes('nvidia'))                              return 'nvidia';
-  // chaldos-stable or chaldos-kde-stable
-  return 'kde';
-}
-
-function fmtSize(bytes){
-  if(!bytes) return '';
-  return (bytes/1024/1024/1024).toFixed(2)+' GB · ISO image';
-}
-
-function renderDownloads(release){
+// ── DOWNLOADS FROM downloads.json ──
+function renderDownloads(data){
   const t = TRANSLATIONS[currentLang];
-  // Build asset map
+  const dls = data.downloads || {};
+
+  const keyMap = {
+    'chaldos':                  'kde',
+    'chaldos-gnome':            'gnome',
+    'chaldos-nvidia':           'nvidia',
+    'chaldos-gnome-nvidia':     'gnome-nvidia',
+    'chaldos-nvidia-open':      'nvidia-open',
+    'chaldos-gnome-nvidia-open':'gnome-nvidia-open',
+  };
+
   const assets = {};
-  for(const a of release.assets){
-    const key = classifyAsset(a.name);
-    assets[key] = a;
+  for(const [jsonKey, info] of Object.entries(dls)){
+    const slot = keyMap[jsonKey];
+    if(slot && info.url) assets[slot] = info;
   }
 
-  // Smart card boxes
-  const fill = (key, dlId, sizeId) => {
-    const a = assets[key];
-    if(a){
-      const dlEl = document.getElementById(dlId);
-      if(dlEl) dlEl.href = a.browser_download_url;
-      const szEl = document.getElementById(sizeId);
-      if(szEl) szEl.textContent = fmtSize(a.size);
-    }
+  const fill = (slot, dlId, sizeId) => {
+    const a = assets[slot];
+    const dlEl = document.getElementById(dlId);
+    if(dlEl){ dlEl.href = a ? a.url : '#'; if(!a) dlEl.classList.add('btn-disabled'); }
+    const szEl = document.getElementById(sizeId);
+    if(szEl && a && a.size) szEl.textContent = a.size + ' · ISO image';
   };
-  fill('kde',         'dl-amd',        'size-amd');
-  fill('nvidia',      'dl-nvidia',     'size-nvidia');
-  fill('nvidia-open', 'dl-nvidia-open','size-nvidia-open');
+  fill('kde',         'dl-amd',         'size-amd');
+  fill('nvidia',      'dl-nvidia',      'size-nvidia');
+  fill('nvidia-open', 'dl-nvidia-open', 'size-nvidia-open');
 
-  // Hide loading
   document.getElementById('rec-loading').style.display='none';
-
-  // Release badge
   document.getElementById('release-badge').className='badge badge-stable';
   document.getElementById('release-badge').textContent = t.badge_stable;
-  document.getElementById('release-head-title').textContent = 'ChaldOS-Uranus — '+release.tag_name;
+  if(data.version){
+    document.getElementById('release-head-title').textContent = 'ChaldOS-Uranus — ' + data.version;
+  }
 
-  // All downloads list
   const rows = [
-    {key:'kde',         name:t.dl_kde_std,  meta:t.dl_kde_std_meta,  primary:true},
-    {key:'gnome',       name:t.dl_gnome_std,meta:t.dl_gnome_std_meta, primary:false},
-    {key:'nvidia',      name:t.dl_kde_nv,   meta:t.dl_kde_nv_meta,   primary:false},
-    {key:'gnome-nvidia',name:t.dl_gnome_nv, meta:t.dl_gnome_nv_meta, primary:false},
-    {key:'nvidia-open', name:t.dl_kde_nvo,  meta:t.dl_kde_nvo_meta,  primary:false},
-    {key:'gnome-nvidia-open',name:t.dl_gnome_nvo,meta:t.dl_gnome_nvo_meta,primary:false},
+    {key:'kde',              name:t.dl_kde_std,   meta:t.dl_kde_std_meta,   primary:true},
+    {key:'gnome',            name:t.dl_gnome_std, meta:t.dl_gnome_std_meta,  primary:false},
+    {key:'nvidia',           name:t.dl_kde_nv,    meta:t.dl_kde_nv_meta,    primary:false},
+    {key:'gnome-nvidia',     name:t.dl_gnome_nv,  meta:t.dl_gnome_nv_meta,  primary:false},
+    {key:'nvidia-open',      name:t.dl_kde_nvo,   meta:t.dl_kde_nvo_meta,   primary:false},
+    {key:'gnome-nvidia-open',name:t.dl_gnome_nvo, meta:t.dl_gnome_nvo_meta, primary:false},
   ];
 
   const kdeIcon = `<svg width="22" height="22" fill="none" viewBox="0 0 24 24" style="flex-shrink:0"><rect x="3" y="4" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M8 20h8M12 18v2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>`;
@@ -600,26 +592,22 @@ function renderDownloads(release){
     if(key.includes('nvidia')) return nvIcon;
     return kdeIcon;
   }
-  function colorFor(key, primary){
-    return primary ? 'var(--teal)' : 'var(--text2)';
-  }
-
   const dlIcon = `<svg width="13" height="13" fill="none" viewBox="0 0 24 24"><path d="M12 3v13M5 13l7 7 7-7" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
-  let html = '';
+  let dlhtml = '';
   for(const row of rows){
     const a = assets[row.key];
-    const url = a ? a.browser_download_url : '#';
-    const size = a ? fmtSize(a.size) : '';
+    const url = a ? a.url : '#';
+    const size = a ? (a.size + ' · ') : '';
     const disabled = !a ? ' btn-disabled' : '';
     const btnClass = row.primary ? 'btn-primary' : 'btn-secondary';
-    const iconColor = colorFor(row.key, row.primary);
-    html += `<div class="dl-row">
+    const iconColor = a ? (row.primary ? 'var(--teal)' : 'var(--text2)') : 'var(--text2)';
+    dlhtml += `<div class="dl-row">
       <div class="dl-info">
         <span style="color:${iconColor}">${iconFor(row.key)}</span>
         <div>
           <div class="dl-name">${row.name}</div>
-          <div class="dl-meta">${size ? size+' · ' : ''}${row.meta}</div>
+          <div class="dl-meta">${size}${row.meta}</div>
         </div>
       </div>
       <a class="btn ${btnClass} btn-sm${disabled}" href="${url}" ${!a?'tabindex="-1"':''}>
@@ -627,7 +615,20 @@ function renderDownloads(release){
       </a>
     </div>`;
   }
-  document.getElementById('dl-list').innerHTML = html;
+  document.getElementById('dl-list').innerHTML = dlhtml;
+
+  const gpu = detectGpu();
+  const banner = document.getElementById('smart-banner');
+  const bannerText = document.getElementById('banner-text');
+  if(gpu==='nvidia'){
+    bannerText.textContent = t.banner_nvidia;
+    banner.style.display='inline-flex';
+    selectGpu('nvidia', document.getElementById('btn-nvidia'));
+  } else if(gpu==='amd'){
+    bannerText.textContent = t.banner_amd;
+    banner.style.display='inline-flex';
+    selectGpu('amd', document.getElementById('btn-amd'));
+  }
 }
 
 function showNoRelease(){
@@ -640,26 +641,12 @@ function showNoRelease(){
 
 async function fetchRelease(){
   try{
-    const r = await fetch(`https://api.github.com/repos/${REPO}/releases/latest`);
+    const r = await fetch('downloads.json?_='+Date.now());
     if(!r.ok){ showNoRelease(); return; }
     const data = await r.json();
-    if(!data || !data.assets){ showNoRelease(); return; }
-    window._releaseData = data;
+    const hasLinks = data.downloads && Object.values(data.downloads).some(d=>d.url);
+    if(!hasLinks){ showNoRelease(); return; }
     renderDownloads(data);
-    // GPU banner
-    const gpu = detectGpu();
-    const banner = document.getElementById('smart-banner');
-    const bannerText = document.getElementById('banner-text');
-    const t = TRANSLATIONS[currentLang];
-    if(gpu==='nvidia'){
-      bannerText.textContent = t.banner_nvidia;
-      banner.style.display='inline-flex';
-      selectGpu('nvidia', document.getElementById('btn-nvidia'));
-    } else if(gpu==='amd'){
-      bannerText.textContent = t.banner_amd;
-      banner.style.display='inline-flex';
-      selectGpu('amd', document.getElementById('btn-amd'));
-    }
   }catch(e){ showNoRelease(); }
 }
 
