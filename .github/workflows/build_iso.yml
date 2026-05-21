@@ -328,3 +328,81 @@ jobs:
           for f in ./mega3/*.iso; do
             megaput -u "${{ steps.creds.outputs.email }}" -p "${{ steps.creds.outputs.password }}" --path /Root/ChaldOS/ "$f"
           done
+
+  update-downloads-json:
+    name: Update downloads.json
+    needs: [upload-mega-1, upload-mega-2, upload-mega-3]
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install megatools
+        run: sudo apt-get install -y megatools
+
+      - name: Parse MEGA credentials
+        id: creds
+        env:
+          MEGA: ${{ secrets.MEGA }}
+        run: |
+          mapfile -t lines <<< "$MEGA"
+          echo "email1=${lines[0]}" >> $GITHUB_OUTPUT
+          echo "password1=${lines[1]}" >> $GITHUB_OUTPUT
+          echo "email2=${lines[2]}" >> $GITHUB_OUTPUT
+          echo "password2=${lines[3]}" >> $GITHUB_OUTPUT
+          echo "email3=${lines[4]}" >> $GITHUB_OUTPUT
+          echo "password3=${lines[5]}" >> $GITHUB_OUTPUT
+
+      - name: Get MEGA links and update downloads.json
+        env:
+          EMAIL1: ${{ steps.creds.outputs.email1 }}
+          PASS1:  ${{ steps.creds.outputs.password1 }}
+          EMAIL2: ${{ steps.creds.outputs.email2 }}
+          PASS2:  ${{ steps.creds.outputs.password2 }}
+          EMAIL3: ${{ steps.creds.outputs.email3 }}
+          PASS3:  ${{ steps.creds.outputs.password3 }}
+        run: |
+          get_link() {
+            local email=$1 pass=$2 filename=$3
+            megals -u "$email" -p "$pass" -l /Root/ChaldOS/ 2>/dev/null               | grep "$filename" | awk '{print $NF}' | head -1
+          }
+
+          # Account 1: gnome editions
+          URL_GNOME=$(get_link "$EMAIL1" "$PASS1" "chaldos-gnome-stable")
+          URL_GNOME_NV=$(get_link "$EMAIL1" "$PASS1" "chaldos-gnome-nvidia-stable")
+          URL_GNOME_NVO=$(get_link "$EMAIL1" "$PASS1" "chaldos-gnome-nvidia-open-stable")
+
+          # Account 2: chaldos-stable + nvidia-open
+          URL_KDE=$(get_link "$EMAIL2" "$PASS2" "chaldos-stable")
+          URL_NVO=$(get_link "$EMAIL2" "$PASS2" "chaldos-nvidia-open-stable")
+
+          # Account 3: nvidia
+          URL_NV=$(get_link "$EMAIL3" "$PASS3" "chaldos-nvidia-stable")
+
+          VERSION=$(date +%Y%m%d)
+
+          cat > downloads.json <<- EOF
+          {
+            "version": "$VERSION",
+            "build_date": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "downloads": {
+              "chaldos":                  { "url": "$URL_KDE",      "size": "6.81 GB" },
+              "chaldos-gnome":            { "url": "$URL_GNOME",    "size": "5.90 GB" },
+              "chaldos-nvidia":           { "url": "$URL_NV",       "size": "7.47 GB" },
+              "chaldos-gnome-nvidia":     { "url": "$URL_GNOME_NV", "size": "6.56 GB" },
+              "chaldos-nvidia-open":      { "url": "$URL_NVO",      "size": "7.35 GB" },
+              "chaldos-gnome-nvidia-open":{ "url": "$URL_GNOME_NVO","size": "6.44 GB" }
+            }
+          }
+EOF
+
+      - name: Commit and push downloads.json
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add downloads.json
+          git diff --cached --quiet || git commit -m "chore: update download links [skip ci]"
+          git push
