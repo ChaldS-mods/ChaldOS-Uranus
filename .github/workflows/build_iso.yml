@@ -382,22 +382,19 @@ jobs:
           # Account 3: nvidia
           URL_NV=$(get_link "$EMAIL3" "$PASS3" "chaldos-nvidia-stable")
 
-          VERSION=$(date +%Y%m%d)
 
-          cat > downloads.json <<- EOF
-          {
-            "version": "$VERSION",
-            "build_date": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
-            "downloads": {
-              "chaldos":                  { "url": "$URL_KDE",      "size": "6.81 GB" },
-              "chaldos-gnome":            { "url": "$URL_GNOME",    "size": "5.90 GB" },
-              "chaldos-nvidia":           { "url": "$URL_NV",       "size": "7.47 GB" },
-              "chaldos-gnome-nvidia":     { "url": "$URL_GNOME_NV", "size": "6.56 GB" },
-              "chaldos-nvidia-open":      { "url": "$URL_NVO",      "size": "7.35 GB" },
-              "chaldos-gnome-nvidia-open":{ "url": "$URL_GNOME_NVO","size": "6.44 GB" }
-            }
-          }
-EOF
+          VERSION=$(date +%Y%m%d)
+          BUILD_DATE=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          jq -n \
+            --arg version "$VERSION" \
+            --arg build_date "$BUILD_DATE" \
+            --arg u1 "$URL_KDE" \
+            --arg u2 "$URL_GNOME" \
+            --arg u3 "$URL_NV" \
+            --arg u4 "$URL_GNOME_NV" \
+            --arg u5 "$URL_NVO" \
+            --arg u6 "$URL_GNOME_NVO" \
+            '{"version":$version,"build_date":$build_date,"downloads":{"chaldos":{"url":$u1,"size":"6.81 GB"},"chaldos-gnome":{"url":$u2,"size":"5.90 GB"},"chaldos-nvidia":{"url":$u3,"size":"7.47 GB"},"chaldos-gnome-nvidia":{"url":$u4,"size":"6.56 GB"},"chaldos-nvidia-open":{"url":$u5,"size":"7.35 GB"},"chaldos-gnome-nvidia-open":{"url":$u6,"size":"6.44 GB"}}}' > downloads.json
 
       - name: Commit and push downloads.json
         run: |
