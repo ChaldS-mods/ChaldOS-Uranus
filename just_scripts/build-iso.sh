@@ -141,3 +141,13 @@ ${container_mgr} run --rm --privileged  \
     SECURE_BOOT_KEY_URL='https://github.com/ublue-os/bazzite/raw/main/secure_boot.der' \
     VARIANT="${variant}" \
     VERSION="${latest}"
+
+
+# Move ISO to GitHub Release
+echo "Публикация релиза на GitHub..."
+gh release create "${tag}-${git_branch}" \
+    "${project_root}/just_scripts/output/${tag}-${git_branch}.iso" \
+    "${project_root}/just_scripts/output/${tag}-${git_branch}.iso-CHECKSUM" \
+    --title "ChaldOS ${tag} (${git_branch})" \
+    --notes "Автоматическая сборка ветки ${git_branch} | Образ: ${tag}"
+echo "Релиз опубликован!"
